@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ogida\\OneDrive\\Desktop\\CroKnitters\\CroKnitters\\CroKnitters\\CroKnitters.csproj": {}
+    "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\CroKnitters.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ogida\\OneDrive\\Desktop\\CroKnitters\\CroKnitters\\CroKnitters\\CroKnitters.csproj": {
+    "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\CroKnitters.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ogida\\OneDrive\\Desktop\\CroKnitters\\CroKnitters\\CroKnitters\\CroKnitters.csproj",
+        "projectUniqueName": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\CroKnitters.csproj",
         "projectName": "CroKnitters",
-        "projectPath": "C:\\Users\\ogida\\OneDrive\\Desktop\\CroKnitters\\CroKnitters\\CroKnitters\\CroKnitters.csproj",
+        "projectPath": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\CroKnitters.csproj",
         "packagesPath": "C:\\Users\\ogida\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ogida\\OneDrive\\Desktop\\CroKnitters\\CroKnitters\\CroKnitters\\obj\\",
+        "outputPath": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ogida\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -180,3 +180,14 @@ C:\Users\ogida\OneDrive\Desktop\CroKnitters\CroKnitters\CroKnitters\obj\Debug\ne
 C:\Users\ogida\OneDrive\Desktop\CroKnitters\CroKnitters\CroKnitters\obj\Debug\net7.0\CroKnitters.pdb
 C:\Users\ogida\OneDrive\Desktop\CroKnitters\CroKnitters\CroKnitters\obj\Debug\net7.0\CroKnitters.genruntimeconfig.cache
 C:\Users\ogida\OneDrive\Desktop\CroKnitters\CroKnitters\CroKnitters\obj\Debug\net7.0\ref\CroKnitters.dll
+C:\Users\ogida\OneDrive\Documents\GitHub\CroKnitters_cont\CroKnitters\obj\Debug\net7.0\CroKnitters.csproj.AssemblyReference.cache
+C:\Users\ogida\OneDrive\Documents\GitHub\CroKnitters_cont\CroKnitters\obj\Debug\net7.0\CroKnitters.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ogida\OneDrive\Documents\GitHub\CroKnitters_cont\CroKnitters\obj\Debug\net7.0\CroKnitters.AssemblyInfoInputs.cache
+C:\Users\ogida\OneDrive\Documents\GitHub\CroKnitters_cont\CroKnitters\obj\Debug\net7.0\CroKnitters.AssemblyInfo.cs
+C:\Users\ogida\OneDrive\Documents\GitHub\CroKnitters_cont\CroKnitters\obj\Debug\net7.0\CroKnitters.csproj.CoreCompileInputs.cache
+C:\Users\ogida\OneDrive\Documents\GitHub\CroKnitters_cont\CroKnitters\obj\Debug\net7.0\CroKnitters.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\ogida\OneDrive\Documents\GitHub\CroKnitters_cont\CroKnitters\obj\Debug\net7.0\CroKnitters.RazorAssemblyInfo.cache
+C:\Users\ogida\OneDrive\Documents\GitHub\CroKnitters_cont\CroKnitters\obj\Debug\net7.0\CroKnitters.RazorAssemblyInfo.cs
+C:\Users\ogida\OneDrive\Documents\GitHub\CroKnitters_cont\CroKnitters\obj\Debug\net7.0\CroKnitters.dll
+C:\Users\ogida\OneDrive\Documents\GitHub\CroKnitters_cont\CroKnitters\obj\Debug\net7.0\refint\CroKnitters.dll
+C:\Users\ogida\OneDrive\Documents\GitHub\CroKnitters_cont\CroKnitters\obj\Debug\net7.0\CroKnitters.pdb

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ixeVvKKG7DPQ9KyrJkeocv8wdK9/v/q9OXAJ4LHuDrpWdjYzbW0j9A8UkE9QC/EmsPMgM0B3Oc5DfoV5aZZnPA==",
+  "dgSpecHash": "NqMSX0N6U1cRhyPXDwInMCf7ORl2ZVHWqUHxR4RPA3/qM/f3v5oBndADEsVtdhq5zPmBVi7pcYGXqg0oCFQ9DA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ogida\\OneDrive\\Desktop\\CroKnitters\\CroKnitters\\CroKnitters\\CroKnitters.csproj",
+  "projectFilePath": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\CroKnitters.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ogida\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\ogida\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
