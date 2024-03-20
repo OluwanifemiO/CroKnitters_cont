@@ -39,7 +39,7 @@ namespace CroKnitters.Controllers
                 {
                     ActivePattern = p,
                     NumberOfComments = p.PatternComments.Count,
-                    Images = p.PatternImages.Select(img => img.Image.ImageSrc).ToList() // Assuming ImageSrc is the path to the image
+                    Images = p.PatternImages.Select(img => img.Image.ImageSrc).ToList() 
                 }).ToList();
 
             var projects = projectsQuery
@@ -49,7 +49,7 @@ namespace CroKnitters.Controllers
                 {
                     ActiveProject = p,
                     NumberOfComments = p.ProjectComments.Count,
-                    Images = p.ProjectImages.Select(img => img.Image.ImageSrc).ToList() // Assuming ImageSrc is the path to the image
+                    Images = p.ProjectImages.Select(img => img.Image.ImageSrc).ToList() 
                 }).ToList();
 
             feed.Patterns = patterns;

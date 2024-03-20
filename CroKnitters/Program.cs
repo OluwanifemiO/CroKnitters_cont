@@ -1,4 +1,5 @@
 using CroKnitters.Entities;
+using CroKnitters.Hubs;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,7 +20,7 @@ builder.Services.AddSession(options =>
 var connStr = builder.Configuration.GetConnectionString("DBconnectionString");
 builder.Services.AddDbContext<CrochetAppDbContext>(options => options.UseSqlServer(connStr));
 
-builder.Services.AddAuthentication();
+//builder.Services.AddAuthentication();
 
 
 var app = builder.Build();
@@ -42,10 +43,10 @@ app.UseSession();
 
 app.UseAuthorization();
 
-//app.UseEndpoints(endpoints =>
-//{
-//    endpoints.MapHub<ChatHub>();
-//});
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<PrivateChatHub>("/privateChatHub");
+});
 
 app.MapControllerRoute(
     name: "default",

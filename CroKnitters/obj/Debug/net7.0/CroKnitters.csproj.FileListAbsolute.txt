@@ -273,3 +273,4 @@ C:\Users\ogida\OneDrive\Documents\GitHub\CroKnitters_cont\CroKnitters\obj\Debug\
 C:\Users\ogida\OneDrive\Documents\GitHub\CroKnitters_cont\CroKnitters\obj\Debug\net7.0\CroKnitters.csproj.CopyComplete
 C:\Users\ogida\OneDrive\Documents\GitHub\CroKnitters_cont\CroKnitters\obj\Debug\net7.0\CroKnitters.genruntimeconfig.cache
 C:\Users\ogida\OneDrive\Documents\GitHub\CroKnitters_cont\CroKnitters\obj\Debug\net7.0\ref\CroKnitters.dll
+C:\Users\ogida\OneDrive\Documents\GitHub\CroKnitters_cont\CroKnitters\bin\Debug\net7.0\libman.json
