@@ -19,36 +19,6 @@
 
     <!--container for the chats list section and messages section-->
     <div class="flex">
-        <!--chats list-->
-        @*         <div class="flex-1 sm:w-full sm:max-w-sm rounded-lg border text-center shadow-xl h-auto m-5 justify-content-start bg-white chats-list">
-
-        @if (TempData["error"] != null)
-        {
-        <p class="text-danger">
-        @TempData["error"]
-        </p>
-        }
-
-        <div class="sm:w-full sm:max-w-sm p-4">
-        <ul role="list" class="divide-y divide-grey-900">
-        <li class="flex justify-between gap-x-6 py-5">
-        <!--show the user's info-->
-        <a asp-controller="" asp-action="" class="">
-        <div class="flex min-w-0 gap-x-4">
-        <img class="h-12 w-12 flex-none rounded-full bg-gray-50" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
-        <div class="min-w-0 flex-auto">
-        <p class="text-sm font-semibold leading-6 text-gray-900">Leslie Alexander</p>
-        <p class="mt-1 truncate text-xs leading-5 text-gray-500">leslie.alexander@example.com</p>
-        </div>
-        </div>
-
-        </a>
-        </li>
-        <hr />
-        </ul>
-        </div>
-        </div> *@
-
 
         <!--messages-->
         <div class="flex-1 rounded-lg border text-center w-auto h-auto shadow-xl m-5 justify-content-start bg-white messages">
@@ -64,25 +34,27 @@
 
                 <div class="messageList">
                     <!--loop through the messages and arrange them accordingly-->
-                    @foreach (var message in Model)
+                    @foreach (var msg in Model)
                     {
                         <!--if the current user is the sender, align their messages to the right-->
-                        @if (message.SenderId == @Context.Request.Cookies["userId"])
+                        @if (msg.SenderId == @Context.Request.Cookies["userId"])
                         {
                             <!--Sender side-->
-                            <div class="block bg-primary align-content-end text-white mb-3">
-                                <p class="text-2xl"> @message.Content </p>
-                                <p> @message.SentTime</p>
+                            <div class="sent bg-primary block text-white mb-3 message">
+                                <p class="text-2xl"> @msg.Content </p>
+                                <p> @msg.SentTime</p>
                             </div>
                         }
                         else
                         {
                             <!--Receiver side-->
-                            <div class="block bg-secondary align-content-start text-white mb-3">
-                                <p class="text-2xl"> @message.Content </p>
-                                <p> @message.SentTime</p>
+                            <div class="received bg-secondary block text-white mb-3 message">
+                                <p class="text-2xl"> @msg.Content </p>
+                                <p> @msg.SentTime</p>
                             </div>
                         }
+
+                        ViewBag.receiverId = msg.ReceiverId;
                     }
                 </div>
 
@@ -90,8 +62,10 @@
                 <div class="input-group text-center mb-3">
                     <!--once the user presses send, save the message to the db ththrough the controller-->
                     <form asp-controller="Chats" onsubmit="sendMessage(event)" method="post">
-                        <input type="hidden" name="userId" value="@Context.Request.Cookies["userId"]">
-                        <input type="text" class="form-control rounded-pill" name="message-input" id="message-input" placeholder="Send a message...">
+                     
+                        <input type="hidden" name="senderId" id="senderId" value="@Context.Request.Cookies["userId"]">
+                        <input type="hidden" name="receiverId" id="receiverId" value="@ViewBag.receiverId">
+                        <input type="text" class="form-control rounded-pill w-full" name="message-input" id="message-input" placeholder="Send a message...">
 
                         <div class="col-sm-2 input-group-append">
                             <button class="btn btn-primary rounded-pill" id="send" type="submit">Send</button>
@@ -111,46 +85,59 @@
 
     <script>
 
-        var connection = new signalR.HubConnectionBuilder().withUrl("/PrivateChatHub").build();
+        var connection = new signalR.HubConnectionBuilder().withUrl("/privateChatHub").build();
 
-        var _connectionId = '';
+        //Disable the send button until connection is established.
+        document.getElementById("send").disabled = true;
 
         //this will show the message sent by the other user on the page
-        connection.on("ReceiveMessage", function (data) {
-            var message = document.createElement("div")
-            message.classList.add('message block bg-secondary align-content-start text-white mb-3')
+        connection.on("RecieveMessage", function (formData) {
+            var msg = document.createElement("div")
 
-            var p = document.createElement("p")
-            p.appendChild(document.createTextNode(data.Content))
+            var userId = document.getElementById("senderId").value;
 
-            var p2 = document.createElement("p")
-            p2.appendChild(document.createTextNode(data.CreationDate))
+            if (formData.senderId === userId) {
+                msg.classList.add('sent', 'bg-primary', 'text-white', 'mb-3', 'message'); // Apply CSS class for sent messages
+            } else {
+                msg.classList.add('received', 'bg-secondary', 'text-white', 'mb-3', 'message'); // Apply CSS class for received messages
+            }
+            console.log(formData)
+            var p = document.createElement("p");
+            p.className = 'text-2xl';
+            p.appendChild(document.createTextNode(formData.content));
 
-            message.appendChild(p);
-            message.appendChild(p2);
+            var p2 = document.createElement("p");
+            p2.appendChild(document.createTextNode(formData.creationDate));
 
-            document.querySelector('.messageList').append(message);
+            msg.appendChild(p);
+            msg.appendChild(p2);
+
+            document.querySelector('.messageList').append(msg);
         })
 
-       
+
 
         //start the connection and get the connection id
         connection.start().then(function () {
-            connection.invoke('getConnectionId')
-                .then(function (connectionId) {
-                    _connectionId = connectionId
-                    
-                })
-                .catch(function (err) {
-                    console.log(err)
-                })
+
+            console.log("Connection started");
+            document.getElementById("send").disabled = false;
+
+        }).catch(function (err) {
+            return console.log(err.toString())
         })
 
         var sendMessage = function (event) {
             event.preventDefault();
-            var data = new FormData(event.target);
-            document.getElementById('message-input').value = '';
-            axios.post(data)
+
+            var formData = new FormData();
+            formData.append('senderId', document.getElementById("senderId").value);
+            formData.append('message', document.getElementById("message-input").value);
+            formData.append('receiverId', document.getElementById("receiverId").value);
+
+            document.getElementById("message-input").value = '';
+
+            axios.post('/Chats/SendMessage', formData)
                 .then(res => {
                     console.log("Message sent!")
                 })
@@ -158,6 +145,19 @@
                     console.log("Failed to send message!")
                 })
         }
+
+                // document.getElementById("send").addEventListener("click", function (event) {
+                //     var senderId = document.getElementById("senderId").value;
+                //     var message = document.getElementById("message-input").value;
+
+                //     console.log("Sender ID:", senderId);
+                //     console.log("Message:", message);
+
+                //     connection.invoke("SendMessage", senderId, message).catch(function (err) {
+                //         return console.error(err.toString());
+                //     });
+                //     event.preventDefault();
+                // });
 
 
     </script>

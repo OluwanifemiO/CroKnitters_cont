@@ -17,5 +17,7 @@ namespace CroKnitters.Models
         public string? UserImageSrc { get; set; }
 
         public PrivateChat PrivateChat { get; set; }
+
+        public IEnumerable<User> users { get; set; }
     }
 }

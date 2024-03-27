@@ -8,7 +8,7 @@ namespace CroKnitters.Models
     {
         public Pattern ActivePattern {  get; set; }
 
-        public List<string>? Tags { get; set; }
+        public string? Tags { get; set; }
 
         public IFormFileCollection? Images { get; set; }
 

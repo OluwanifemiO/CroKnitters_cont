@@ -29,6 +29,10 @@
       "PackagePath": "staticwebassets\\img\\background.jpg"
     },
     {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\patterns\\QueryChart.png",
+      "PackagePath": "staticwebassets\\img\\patterns\\QueryChart.png"
+    },
+    {
       "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\patterns\\alpine-stitch.jpeg",
       "PackagePath": "staticwebassets\\img\\patterns\\alpine-stitch.jpeg"
     },
@@ -39,6 +43,18 @@
     {
       "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\patterns\\cable-stitch.jpg",
       "PackagePath": "staticwebassets\\img\\patterns\\cable-stitch.jpg"
+    },
+    {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\patterns\\chart.png",
+      "PackagePath": "staticwebassets\\img\\patterns\\chart.png"
+    },
+    {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\patterns\\checkerboard-crochet-square-pattern.jpg",
+      "PackagePath": "staticwebassets\\img\\patterns\\checkerboard-crochet-square-pattern.jpg"
+    },
+    {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\patterns\\checkerboard-pattern.webp",
+      "PackagePath": "staticwebassets\\img\\patterns\\checkerboard-pattern.webp"
     },
     {
       "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\patterns\\chevron-stitch.png",
@@ -85,8 +101,16 @@
       "PackagePath": "staticwebassets\\img\\profile\\image_two.jpg"
     },
     {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\2c69255c959d5a86cc081e234ca3f7c5.jpg",
+      "PackagePath": "staticwebassets\\img\\projects\\2c69255c959d5a86cc081e234ca3f7c5.jpg"
+    },
+    {
       "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\amigurumi-bunny.jpeg",
       "PackagePath": "staticwebassets\\img\\projects\\amigurumi-bunny.jpeg"
+    },
+    {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\amigurumi-cat-crochet.jpg",
+      "PackagePath": "staticwebassets\\img\\projects\\amigurumi-cat-crochet.jpg"
     },
     {
       "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\baby-socks.jpeg",
@@ -101,12 +125,20 @@
       "PackagePath": "staticwebassets\\img\\projects\\granny-square-blanket.jpeg"
     },
     {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\image_6487327.jpg",
+      "PackagePath": "staticwebassets\\img\\projects\\image_6487327.jpg"
+    },
+    {
       "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\knit-bag.jpeg",
       "PackagePath": "staticwebassets\\img\\projects\\knit-bag.jpeg"
     },
     {
       "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\knit-hat.jpeg",
       "PackagePath": "staticwebassets\\img\\projects\\knit-hat.jpeg"
+    },
+    {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\pattern.png",
+      "PackagePath": "staticwebassets\\img\\projects\\pattern.png"
     },
     {
       "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\summer-top.jpeg",

@@ -11,14 +11,13 @@
         <hr />
 
         <div class="pt-2 pb-2">
-            <form asp-action="EditProject" method="post">
+            <form asp-action="EditProject" method="post" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="ActiveProject.ProjectId" name="ProjectId" />
+                <input type="hidden" asp-for="ActiveProject.ProjectId" />
 
-                <!--pattern details: images, id, name, description, creation date, stitch type, stitch count-->
                 <div class="projectImage mb-3">
-                    <label for="ProjectImages">Upload images for your patterns:</label>
-                    <input type="file" id="ProjectImages" name="ProjectImages" accept="image/*">
+                    <label for="Images">Upload images for your patterns:</label>
+                    <input type="file" id="Images" name="Images" accept="image/*">
                     <button type="submit" class="btn">Upload</button>
                 </div>
 
@@ -36,7 +35,7 @@
 
                 <div class="mb-3 form-group">
                     <b> <label class="control-label">Creation Date</label></b>
-                    <input asp-for="ActiveProject.CreationDate" type="datetime" class="form-control" readonly="readonly" />
+                    <input asp-for="ActiveProject.CreationDate" type="date" class="form-control" readonly="readonly" />
                 </div>
 
                 <div class="mb-3 form-group">

@@ -1,0 +1,218 @@
+﻿@model GroupChatViewModel
+@{
+    ViewData["Title"] = "Group Chat";
+}
+
+<div class="container mx-auto">
+
+    @*     <div class=" text-center">
+    @using (Html.BeginForm("#", "#", FormMethod.Get))
+    {
+    <div class="input-group search">
+    <input type="text" class="form-control rounded-3 w-25" name="search" placeholder="Search...">
+    <div class="col-sm-2 input-group-append">
+    <button class="btn btn-outline-secondary btn-dark" type="submit">Search</button>
+    </div>
+    </div>
+    }
+    </div> *@
+
+    <!--container for the chats list section and messages section-->
+    <div class="flex">
+        @*  @if (Model.groupMembers == null || Model.groupMembers.Count == 0)
+        {
+        <!--If the user has no chats-->
+        <div class="sm:w-full sm:max-w-sm rounded-lg border text-center shadow-xl h-auto m-5 justify-content-center bg-white">
+        <p class="text-5xl"> OOPS! Looks like you have no one to talk to.</p>
+        </div>
+        }
+        else
+        { *@
+        <div class="flex-1 sm:w-full sm:max-w-sm rounded-lg border text-center shadow-xl h-auto m-5 justify-content-center bg-white chats-list">
+
+            @if (TempData["error"] != null)
+            {
+                <p class="text-danger">
+                    @TempData["error"]
+                </p>
+            }
+
+            <!--list of group members-->
+
+
+            <h2 class="text-2xl text-center font-bold">Group members</h2>
+            <hr />
+            <ul role="list" class="divide-y divide-grey-900">
+
+                @foreach (var member in Model.groupMembers)
+                {
+                    <li class="flex justify-between gap-x-6 py-5">
+                        <!--show the user's info-->
+                        <div class="flex min-w-0 gap-x-4">
+                            <img class="h-12 w-12 flex-none rounded-full bg-gray-50" src="@("~/img/profile/"+member.User.Image.ImageSrc)" asp-append-version="true" alt="User Profile Picture">
+                            <div class="min-w-0 flex-auto">
+                                <h3 class="text-sm font-semibold leading-6 text-gray-900">@member.User.FirstName  @member.User.LastName</h3>
+                                <p class="mt-1 truncate text-xs leading-5 text-gray-500">
+                                    @member.Role
+
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    <hr />
+                }
+
+
+            </ul>
+        </div>
+
+        <!--messages-->
+        <div class="flex-1 rounded-lg border text-center w-auto h-auto shadow-xl m-5 justify-content-start bg-white messages">
+            @if (TempData["error"] != null)
+            {
+                <p class="text-danger">
+                    @TempData["error"]
+                </p>
+            }
+
+            <div class="p-4">
+                <!--messages themselves-->
+
+                <div class="messageList">
+                    <!--loop through the messages and arrange them accordingly-->
+                    @foreach (var msg in Model.viewModel)
+                    {
+                        <!--if the current user is the sender, align their messages to the right-->
+                        @if (msg.SenderId == @Context.Request.Cookies["userId"])
+                        {
+                            <!--Sender side-->
+                            <div class="sent bg-primary block text-white mb-3 message">
+                                <p class="text-2xl"> @msg.Content </p>
+                                <p> @msg.SentTime</p>
+                            </div>
+                        }
+                        else
+                        {
+                            <!--Receiver side-->
+                            <div class="received bg-secondary block text-white mb-3 message">
+                                <p class="text-2xl"> @msg.Content </p>
+                                <p> @msg.SentTime</p>
+                            </div>
+                        }
+
+                        ViewBag.receiverId = msg.ReceiverId;
+                    }
+                </div>
+
+                <!--Text box and send button-->
+                <div class="input-group text-center mb-3">
+                    <!--once the user presses send, save the message to the db ththrough the controller-->
+                    <form asp-controller="Chats" onsubmit="sendMessage(event)" method="post">
+
+                        <input type="hidden" name="senderId" id="senderId" value="@Context.Request.Cookies["userId"]">
+                        <input type="hidden" name="groupId" id="groupId" value="@Model.GroupId">
+                        <input type="text" class="form-control rounded-pill w-full" name="message-input" id="message-input" placeholder="Send a message...">
+
+                        <div class="col-sm-2 input-group-append">
+                            <button class="btn btn-primary rounded-pill" id="send" type="submit">Send</button>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+        @* } *@
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/js/signalr.min.js"></script>
+    <script src="https://www.unpkg.com/axios@1.6.8/dist/axios.min.js"></script>
+
+    <script>
+
+        var connection = new signalR.HubConnectionBuilder().withUrl("/privateChatHub").build();
+
+        var _connectionId = '';
+
+        //Disable the send button until connection is established.
+        document.getElementById("send").disabled = true;
+
+        //this will show the message sent by the other user on the page
+        connection.on("RecieveMessage", function (formData) {
+            var msg = document.createElement("div")
+
+            var userId = document.getElementById("senderId").value;
+
+            if (formData.senderId === userId) {
+                msg.classList.add('sent', 'bg-primary', 'text-white', 'mb-3', 'message'); // Apply CSS class for sent messages
+            } else {
+                msg.classList.add('received', 'bg-secondary', 'text-white', 'mb-3', 'message'); // Apply CSS class for received messages
+            }
+            console.log(formData)
+            var p = document.createElement("p");
+            p.className = 'text-2xl';
+            p.appendChild(document.createTextNode(formData.content));
+
+            var p2 = document.createElement("p");
+            p2.appendChild(document.createTextNode(formData.creationDate));
+
+            msg.appendChild(p);
+            msg.appendChild(p2);
+
+            document.querySelector('.messageList').append(msg);
+        })
+
+
+
+        //start the connection and get the connection id
+        connection.start().then(function () {
+
+            console.log("Connection started");
+            document.getElementById("send").disabled = false;
+
+            connection.invoke("getConnectionId")
+                .then(function (connectionId) {
+                    _connectionId = connectionId
+                })
+
+        }).catch(function (err) {
+            return console.log(err.toString())
+        })
+
+        var leaveGroup = function () {
+            var url = '/Chats/LeaveGroup/' + _connectionId + '/@Model.GroupId' 
+            axios.post(url, null)
+                .then(res => {
+                    console.log("Successfully left group", res);
+                })
+                .catch(err => {
+                    console.err("Failed to leave group", res);
+                })
+        }
+
+        var sendMessage = function (event) {
+            event.preventDefault();
+
+            var formData = new FormData();
+            formData.append('senderId', document.getElementById("senderId").value);
+            formData.append('message', document.getElementById("message-input").value);
+            formData.append('groupId', document.getElementById("groupId").value);
+
+            document.getElementById("message-input").value = '';
+
+            axios.post('/Groups/SendMessage', formData)
+                .then(res => {
+                    console.log("Message sent!")
+                })
+                .catch(err => {
+                    console.log("Failed to send message!")
+                })
+        }
+        
+    </script>
+}
+
+
+

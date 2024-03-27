@@ -7,9 +7,9 @@
 <div class="justify-content-center rounded-lg border w-auto shadow-xl m-5 bg-white">
     <div class="p-5">
         <!--profile pic div-->
-        <div class="justify-center text-md-center profilePicture rounded-full ">
+        <div class="justify-center text-md-center profilePicture rounded-full p-1">
             <!--profile pic-->
-            <img src="@("~/img/profile/"+Model.UserImageSrc)" asp-append-version="true" alt="User Profile image" class="rounded-full"/>
+            <img src="@("~/img/profile/"+Model.UserImageSrc)" asp-append-version="true" alt="User Profile image" width="200px" height="200px" class="profilePicture rounded-full"/>
         </div>
 
         <!--user details-->
@@ -64,11 +64,11 @@
         </div>
 
         <div class="mb-3">
-            <p> <a asp-controller="Friend" asp-action="Index" style="text-decoration-line" role="link">Friends:</a> 0</p>
-            <p> Communities joined: 0</p>
-            <p> Comments: 0</p>
-            <p> <a asp-controller="Project" asp-action="Index" style="text-decoration-line" role="link">Projects: </a> 0</p>
-            <p> <a asp-controller="Pattern" asp-action="Index" style="text-decoration-line" role="link">Patterns: </a> 0</p>
+            <!--<p> <a asp-controller="Friend" asp-action="Index" style="text-decoration-line" role="link">Friends:</a> 0</p>-->
+            <p> Communities joined: @Model.numOfGroups</p>
+            <p> Comments made: @Model.numberofComments</p>
+            <p> <a asp-controller="Project" asp-action="Index" style="text-decoration-line: underline; text-decoration-color: blue" role="link">Projects:</a> @Model.numberofPatterns</p>
+            <p> <a asp-controller="Pattern" asp-action="Index" style="text-decoration-line: underline; text-decoration-color: blue" role="link">Patterns:</a> @Model.numberofProjects</p>
         </div>
 
         <a asp-controller="Profile" asp-action="EditProfile" class=" rounded-md bg-indigo-600 mt-3 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mt-2">Edit Profile</a>

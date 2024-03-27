@@ -44,6 +44,7 @@ namespace CroKnitters.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateProject(ProjectViewModel projectViewModel)
         {
+            TempData["manyImages"] = "";
             //get the current user id
             int userId = Int32.Parse(Request.Cookies["userId"]!);
             //ModelState.Remove("User");
@@ -64,25 +65,27 @@ namespace CroKnitters.Controllers
                     //create a new tag for the pattern
                     if (projectViewModel.Tags != null)
                     {
-                        //iterate through the list of tags
-                        //foreach (var tagName in projectViewModel.Tags)
-                        //{
-                        //should split the tagname if there are more than one i.e tag1, tag2, tag3
-                        //check if it exists
-                        Tag? existingTag = _crochetDbContext.Tags.FirstOrDefault(t => t.TagName == projectViewModel.Tags);
 
-                        // Tag doesn't exist, create a new one                       
-                        if (existingTag == null)
+                        //should split the tagname if there are more than one i.e tag1, tag2, tag3
+                        var splitTags = projectViewModel.Tags.Split(", ").Select(t => t.Trim());
+
+                        foreach (var tag in splitTags)
                         {
-                            existingTag = new Tag { TagName = projectViewModel.Tags };
-                            _crochetDbContext.Tags.Add(existingTag);
+                            //check if it exists
+                            var existingTag = _crochetDbContext.Tags.FirstOrDefault(t => t.TagName == tag);
+
+                            // Tag doesn't exist, create a new one                       
+                            if (existingTag == null)
+                            {
+                                existingTag = new Tag { TagName = projectViewModel.Tags };
+                                _crochetDbContext.Tags.Add(existingTag);
+                            }
+                            else
+                            {
+                                // Tag already exists, associate with the pattern
+                                projectViewModel.ActiveProject.ProjectTags.Add(new ProjectTag { Tag = existingTag });
+                            }
                         }
-                        else
-                        {
-                            // Tag already exists, associate with the pattern
-                            projectViewModel.ActiveProject.ProjectTags.Add(new ProjectTag { Tag = existingTag });
-                        }
-                        //}
                     }
 
                     //add the project
@@ -127,11 +130,13 @@ namespace CroKnitters.Controllers
                 {
                     var fileName = Path.GetFileName(image.FileName);
 
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\img\\projects", fileName);
+                    var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "projects");
+                    var filePath = Path.Combine(directoryPath, fileName);
                     Console.WriteLine("filepath for current picture: " + filePath);
+
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
-                        image.CopyToAsync(stream);
+                        image.CopyTo(stream);
 
                         Console.WriteLine(stream);
                     }
@@ -183,11 +188,17 @@ namespace CroKnitters.Controllers
                 projectViewModel.Owner = owner;
             }
 
+            //get the tags associated with the pattern
+            var tags = _crochetDbContext.ProjectTags.Where(pt => pt.ProjectId == projectViewModel.ProjectId).Select(pt => pt.Tag.TagName).ToList();
+
+            //join them
+            var joinedTags = string.Join(", ", tags.Select(t => t.Trim()));
+
             // Continue building the ViewModel
             var projectDetailViewModel = new ProjectDetailViewModel
             {
                 ActiveProject = projectViewModel,
-                TagNames = projectViewModel.ProjectTags.Select(pt => pt.Tag.TagName).ToList(),
+                TagNames = joinedTags,
                 Images = projectViewModel.ProjectImages
                     .Where(pi => pi.Image != null)
                     .Select(pi => pi.Image.ImageSrc)
@@ -211,11 +222,8 @@ namespace CroKnitters.Controllers
             if (existingProject != null)
             {
                 var tags = existingProject.ProjectTags.Select(pt => pt.Tag.TagName).ToList();
-                var tagName = "";
-                foreach (var tag in tags)
-                {
-                    tagName = String.Join(",", tags);
-                }
+                var tagName = String.Join(", ", tags);
+
                 ProjectViewModel viewModel = new ProjectViewModel()
                 {
                     ActiveProject = existingProject,
@@ -228,50 +236,111 @@ namespace CroKnitters.Controllers
 
         }
 
+        public void UpdateImages(ProjectViewModel viewModel)
+        {
+            //handle image edit
+            //check if there are images in the collection and they are not more than 2
+            if (viewModel.Images != null && viewModel.Images.Count > 0 && viewModel.Images.Count <= 2)
+            {
+                //loop through the collection
+                foreach (var image in viewModel.Images)
+                {
+                    //get the name
+                    var fileName = Path.GetFileName(image.FileName);
+
+                    //check for the image in the db
+                    var imageModel = _crochetDbContext.Images.Where(i => i.ImageSrc == fileName);
+
+                    //if it exists, 
+                    if (imageModel != null)
+                    {
+                        Console.WriteLine("Image exists!");
+                        TempData["ImageExists"] = "Image already exists";
+                    }
+                    else //if it doesn't, create a new one
+                    {
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\img\\patterns", fileName);
+                        Console.WriteLine("filepath for current picture: " + filePath);
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            image.CopyTo(stream);
+
+                            Console.WriteLine(stream);
+                        }
+
+
+                        //var imageSrc = Path.Combine("wwwroot/img/patterns", fileName);
+                        var newImage = new Image { ImageSrc = fileName };
+                        _crochetDbContext.Images.Add(newImage);
+                        //var img = viewModel.ActivePattern.PatternImages.Select(i => i.Image = newImage);
+                        viewModel.ActiveProject.ProjectImages.Add(new ProjectImage { Image = newImage });
+                    }
+                }
+
+
+            }
+            else
+            {
+                TempData["manyImages"] = "You can't upload more than 2 images";
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> EditProject(ProjectViewModel projectViewModel)
         {
             if (ModelState.IsValid)
             {
                 //find the project with the id
-                var existingProject = await _crochetDbContext.Projects
+               var existingProject = await _crochetDbContext.Projects
                     .Include(p => p.ProjectTags).ThenInclude(pt => pt.Tag)
                     .Include(p => p.ProjectImages)
                     .FirstOrDefaultAsync(p => p == projectViewModel.ActiveProject);
 
                 if (existingProject == null)
                 {
+                    Console.WriteLine("Didnt find project.");
                     return NotFound();
                 }
 
+                UpdateImages(projectViewModel);
                 // Clear existing tags
-                existingProject.ProjectTags.Clear();
+                //existingProject.ProjectTags.Clear();
 
+                var splitTags = projectViewModel.Tags.Split(", ").Select(t => t.Trim());
                 // Iterate through the tags in the view model and update tags
-                //foreach (var tagName in patternViewModel.Tags)
-                //{
-                if (!string.IsNullOrEmpty(projectViewModel.Tags))
+                foreach (var tagName in splitTags)
                 {
-                    // Check if the tag already exists
-                    var existingTag = _crochetDbContext.Tags.FirstOrDefault(t => t.TagName == projectViewModel.Tags);
-
-                    if (existingTag == null)
+                    if (!string.IsNullOrEmpty(tagName))
                     {
-                        // If the tag doesn't exist, create a new one
-                        existingTag = new Tag { TagName = projectViewModel.Tags };
-                        _crochetDbContext.Tags.Add(existingTag);
+                        // Check if the tag already exists
+                        var existingTag = _crochetDbContext.Tags.FirstOrDefault(t => t.TagName == tagName);
+
+                        if (existingTag == null)
+                        {
+                            // If the tag doesn't exist, create a new one
+                            existingTag = new Tag { TagName = projectViewModel.Tags };
+                            _crochetDbContext.Tags.Add(existingTag);
+                        }
+
+                        // Create a new ProjectTag and associate it with the pattern and tag
+                        existingProject.ProjectTags.Add(new ProjectTag {Project = existingProject, Tag = existingTag });
                     }
-
-                    // Create a new ProjectTag and associate it with the pattern and tag
-                    existingProject.ProjectTags.Add(new ProjectTag { Tag = existingTag });
                 }
-
-                //_crochetDbContext.Patterns.Update(patternViewModel.ActivePattern);
                 // Save changes to the database
                 await _crochetDbContext.SaveChangesAsync();
                 return RedirectToAction("Details", new { id = existingProject.ProjectId });
             }
 
+            // Log or inspect ModelState errors
+            foreach (var key in ModelState.Keys)
+            {
+                var state = ModelState[key];
+                foreach (var error in state.Errors)
+                {
+                    Console.WriteLine($"Key: {key}, Error: {error.ErrorMessage}");
+                }
+            }
+            Console.WriteLine("Something went wrong!");
             return View(projectViewModel);
         }
 

@@ -1,0 +1,35 @@
+﻿@model NewGroupViewModel
+
+@{
+    ViewData["Title"] = "New Group";
+}
+
+
+<div class=" rounded-lg border text-center shadow-xl m-5 justify-content-start bg-white">
+    <div class="p-5">
+        <h2 class="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"> New Group</h2>
+        <hr />
+
+        <div class="pt-2 pb-2">
+            <form asp-action="CreateGroup" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                
+                <div class="m-2 form-group">
+                    <b> <label asp-for="GroupName" class="control-label">Group Name</label></b>
+                    <input asp-for="GroupName" class="form-control" />
+                    <span asp-validation-for="GroupName" class="text-danger"></span>
+                </div>
+
+                <div class="m-2 form-group">
+                    <b> <label asp-for="Description" class="control-label"> Group Description</label></b>
+                    <textarea asp-for="Description" class="form-control"> </textarea>
+                </div>
+
+                <div class="mb-8 form-group">
+                    <input type="submit" value="Create" class="btn rounded-md bg-indigo-600 mt-3 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mt-2" />
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

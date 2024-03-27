@@ -39,11 +39,24 @@ namespace CroKnitters.Controllers
                             }
                         }
 
+                        //get the number of comments, patterns, projects and groups
+                        var commentsMade = _db.Comments.Where(c => c.OwnerId == userIdValue).Count();
+
+                        var patternsOwned = _db.Patterns.Count(c => c.OwnerId == userIdValue);
+
+                        var projectsOwned = _db.Projects.Count(c => c.OwnerId == userIdValue);
+
+                        var groupsJoined = _db.GroupUsers.Count(c => c.UserId == userIdValue);
+
                         // Prepare the view model
                         UserProfileViewModel viewModel = new UserProfileViewModel()
                         {
                             user = user,
-                            UserImageSrc = userImageSrc 
+                            UserImageSrc = userImageSrc, 
+                            numberofComments = commentsMade,
+                            numberofPatterns = patternsOwned,
+                            numberofProjects = projectsOwned,
+                            numOfGroups = groupsJoined
                         };
                         return View("Index", viewModel);
                     }

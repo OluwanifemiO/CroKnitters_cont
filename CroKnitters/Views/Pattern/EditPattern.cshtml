@@ -11,17 +11,21 @@
         <hr />
 
         <div class="pt-2 pb-2">
-            <form asp-action="EditPattern" method="post">
+            <form asp-action="EditPattern" method="post" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="ActivePattern.PatternId" />
 
                 <!--pattern details: images, id, name, description, creation date, stitch type, stitch count-->
                 <div class="patternImage ">
-                    <label for="PatternImages">Upload images for your patterns:</label>
-                    <input type="file" id="PatternImages" name="PatternImages" accept="image/*">
+                    <label for="Images">Upload images for your patterns:</label>
+                    <input type="file" id="Images" name="Images" accept="image/*">
                     <button type="submit" class="btn">Upload</button>
                 </div>
 
+                @if(TempData["ImageExists"] != null)
+                {
+                    <p class="text-info">The image already exists.</p>
+                }
 
                 <div class="m-2 form-group">
                     <b> <label asp-for="ActivePattern.PatternName" class="control-label">Pattern Name</label></b>
@@ -36,7 +40,7 @@
 
                 <div class="m-2 form-group">
                     <b> <label class="control-label">Creation Date</label></b>
-                    <input asp-for="ActivePattern.CreationDate" type="datetime" class="form-control" readonly="readonly" />
+                    <input asp-for="ActivePattern.CreationDate" type="date" class="form-control" readonly="readonly" />
                 </div>
 
                 <div class="m-2 form-group">

@@ -19,18 +19,18 @@ namespace CroKnitters.Hubs
         => Context.ConnectionId;
 
 
-        [HttpPost("[action]")]
-        public async Task SendMessage(int userId, string message)
+        public async Task SendMessage(string senderId, string message)
         {
-            var currentUserId = int.Parse(Context.GetHttpContext().Request.Cookies["userId"]!); // Get the current user id
-
+            Console.WriteLine("sent data: " +senderId  + " " + message);
+            //var currentUserId = int.Parse(Context.GetHttpContext().Request.Cookies["userId"]!); // Get the current user id
+            var SenderId = int.Parse(senderId);
             //find the current user
-            var currentUser = _context.Users.Find(currentUserId);
+            var currentUser = _context.Users.Find(SenderId);
 
             //save the data in the message model to the db 
             var msg = new Message()
             {
-                SenderId = currentUserId,
+                SenderId = SenderId,
                 Content = message,
                 CreationDate = DateTime.Now,
                 Sender = currentUser
@@ -41,12 +41,12 @@ namespace CroKnitters.Hubs
 
 
             //as the message is sent, let the other user receive the message on their end 
-            await Clients.User(userId.ToString()).SendAsync("RecieveMessage", new
+            await Clients.All.SendAsync("ReceiveMessage", new
             {
-                SenderId = currentUserId,
-                Content = msg.Content,
-                CreationDate = msg.CreationDate.ToString("dd/MM/yyyy hh:mm:ss"),
-                Sender = currentUser
+                //SenderId = currentUserId,
+                content = msg.Content,
+                creationDate = msg.CreationDate.ToString("dd/MM/yyyy hh:mm:ss"),
+                //Sender = currentUser
             });
         }
     }

@@ -850,22 +850,22 @@ public partial class CrochetAppDbContext : DbContext
         //seed into userpattern
         modelBuilder.Entity<UserPattern>().HasData(
             new UserPattern() { UpatId = 1, PatternId = 1, UserId = 1 },
-            new UserPattern() { UpatId = 2, PatternId = 2, UserId = 1 },
+            new UserPattern() { UpatId = 2, PatternId = 2, UserId = 2 },
             new UserPattern() { UpatId = 3, PatternId = 3, UserId = 2 },
-            new UserPattern() { UpatId = 4, PatternId = 4, UserId = 2 },
-            new UserPattern() { UpatId = 5, PatternId = 5, UserId = 3 },
+            new UserPattern() { UpatId = 4, PatternId = 4, UserId = 3 },
+            new UserPattern() { UpatId = 5, PatternId = 5, UserId = 1 },
             new UserPattern() { UpatId = 6, PatternId = 6, UserId = 3 },
-            new UserPattern() { UpatId = 7, PatternId = 7, UserId = 4 },
-            new UserPattern() { UpatId = 8, PatternId = 8, UserId = 4 }
+            new UserPattern() { UpatId = 7, PatternId = 7, UserId = 1 },
+            new UserPattern() { UpatId = 8, PatternId = 8, UserId = 2 }
             );
 
         //seed into userproject
         modelBuilder.Entity<UserProject>().HasData(
             new UserProject() { UproId = 1, ProjectId = 1, UserId = 1 },
-            new UserProject() { UproId = 2, ProjectId = 2, UserId = 1 },
-            new UserProject() { UproId = 3, ProjectId = 3, UserId = 1 },
-            new UserProject() { UproId = 4, ProjectId = 4, UserId = 3 },
-            new UserProject() { UproId = 5, ProjectId = 5, UserId = 3 },
+            new UserProject() { UproId = 2, ProjectId = 2, UserId = 2 },
+            new UserProject() { UproId = 3, ProjectId = 3, UserId = 3 },
+            new UserProject() { UproId = 4, ProjectId = 4, UserId = 1 },
+            new UserProject() { UproId = 5, ProjectId = 5, UserId = 2 },
             new UserProject() { UproId = 6, ProjectId = 6, UserId = 3 }
             );
 

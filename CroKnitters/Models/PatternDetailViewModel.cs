@@ -6,7 +6,7 @@ namespace CroKnitters.Models
     {
         public Pattern ActivePattern {  get; set; }
 
-        public List<string> TagNames { get; set; }
+        public string TagNames { get; set; }
 
         //public List<PatternComment> Comments { get; set; }
 

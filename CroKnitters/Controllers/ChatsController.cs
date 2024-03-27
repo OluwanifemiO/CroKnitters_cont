@@ -20,8 +20,17 @@ namespace CroKnitters.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? search)
         {
+            //query the users
+            var userQuery = _context.Users.AsQueryable();
+
+            if(!string.IsNullOrEmpty(search))
+            {
+                userQuery = userQuery.Where(u => u.FirstName.Contains(search) || u.LastName.Contains(search));
+
+                if (userQuery == null) { Console.WriteLine("No User!");  NotFound(); }
+            }
             var currentUserId = Int32.Parse(Request.Cookies["userId"]!); // Get the current user id
 
             // Fetch chats involving the current user
@@ -32,8 +41,9 @@ namespace CroKnitters.Controllers
                     ChatId = pc.PChatId,
                     PartnerId = pc.SenderId == currentUserId ? pc.RecieverId : pc.SenderId,
                     pc.CreationDate,
-                    pc.MessageId // Assuming you have direct access or this can be navigated to obtain message content
-                })
+                    pc.MessageId,
+                    Partner = _context.Users.FirstOrDefault(m => m.UserId == (pc.SenderId == currentUserId ? pc.RecieverId : pc.SenderId))
+        })
                 .AsEnumerable() // Switch to client-side processing for distinct by PartnerId, consider performance for large datasets
                 .GroupBy(pc => pc.PartnerId)
                 .Select(g => g.OrderByDescending(pc => pc.CreationDate).FirstOrDefault()) // Select the most recent chat with each partner
@@ -50,8 +60,10 @@ namespace CroKnitters.Controllers
                 LastMessage = _context.Messages
                 .Where(m => m.MessageId == c.MessageId)
                 .Select(m => m.Content)
-                .FirstOrDefault(), 
-                LastMessageDate = c.CreationDate
+                .FirstOrDefault(),
+                LastMessageDate = c.CreationDate,
+                users = userQuery,
+                UserImageSrc = _context.Images.FirstOrDefault(i => i.ImageId == c.Partner.ImageId.Value).ImageSrc
             }).ToList();
 
             return View(model);
@@ -71,8 +83,8 @@ namespace CroKnitters.Controllers
                 {
                     SenderId = pc.SenderId.ToString(),
                     ReceiverId = pc.RecieverId.ToString(),
-                    Content = pc.Message.Content, 
-                    SentTime = pc.Message.CreationDate 
+                    Content = pc.Message.Content,
+                    SentTime = pc.Message.CreationDate
                 })
                 .OrderBy(m => m.SentTime) // Order by sent time for chronological order
                 .ToListAsync();
@@ -81,38 +93,37 @@ namespace CroKnitters.Controllers
         }
 
 
-        //[HttpPost]
-        //public async Task<IActionResult> SaveMessage(MessageViewModel viewModel)
-        //{
-        //    var currentUserId = int.Parse(Request.Cookies["userId"]!); // Get the current user id
-
-        //    //find the current user
-        //    var currentUser = _context.Users.Where(cu => cu.UserId == currentUserId);
-
-        //    //save the data in the message model to the db 
-        //    var message = _context.Messages.Select(m => new Message()
-        //    {
-        //        MessageId = m.MessageId,
-        //        Content = viewModel.Content,
-
-        //    });
-
-        //    return RedirectToAction("Index"); // Pass the list of messages to the view
-        //}
-
-
-        [HttpPost("[action]")]
-        public async Task<IActionResult> SendMessage(int userId, string message )
+        [HttpPost]
+        public async Task<IActionResult> ChatUser(int id)
         {
             var currentUserId = int.Parse(Request.Cookies["userId"]!); // Get the current user id
 
             //find the current user
-            var currentUser = _context.Users.Find(currentUserId);
+            var currentUser = _context.Users.Where(cu => cu.UserId == currentUserId);
+
+            return RedirectToAction("PrivateChat", new {id = id}); 
+        }
+
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> SendMessage(string senderId, string message, string receiverId)
+        {
+            Console.WriteLine("sent data: sender ID:" + senderId + " , message content: " + message);
+            //var currentUserId = int.Parse(Context.GetHttpContext().Request.Cookies["userId"]!); // Get the current user id
+            var SenderId = int.Parse(senderId);
+
+            //retrieve the receiverId
+            var ReceiverId = int.Parse(receiverId);
+            //find the current user
+            var currentUser = _context.Users.Find(SenderId);
+
+            //find the receiver
+            var receiver = _context.Users.Find(ReceiverId);
 
             //save the data in the message model to the db 
             var msg = new Message()
             {
-                SenderId = currentUserId,
+                SenderId = SenderId,
                 Content = message,
                 CreationDate = DateTime.Now,
                 Sender = currentUser
@@ -121,16 +132,27 @@ namespace CroKnitters.Controllers
             _context.Messages.Add(msg);
             await _context.SaveChangesAsync();
 
+            var chat = new PrivateChat()
+            {
+                SenderId = SenderId,
+                RecieverId = ReceiverId,
+                MessageId = msg.MessageId,
+                CreationDate = msg.CreationDate,
+                Sender = currentUser,
+                Reciever = receiver
+            };
+            _context.PrivateChat.Add(chat);
+            await _context.SaveChangesAsync();
 
             //as the message is sent, let the other user receive the message on their end then return an Ok result
-            await _chat.Clients.User(userId.ToString()).SendAsync("RecieveMessage", new
+            await _chat.Clients.All.SendAsync("RecieveMessage", new
             {
-                SenderId = currentUserId,
-                Content = msg.Content,
-                CreationDate = msg.CreationDate.ToString("dd/MM/yyyy hh:mm:ss"), 
-                Sender = currentUser
+                //SenderId = currentUserId,
+                content = msg.Content,
+                creationDate = msg.CreationDate.ToString("dd/MM/yyyy hh:mm:ss"),
+                //Sender = currentUser
             });
-            return Ok(); 
+            return Ok();
         }
     }
 }
