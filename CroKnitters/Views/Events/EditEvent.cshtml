@@ -1,0 +1,47 @@
+﻿@model EventDetailsViewModel
+
+@{
+    ViewData["Title"] = "Edit Event";
+}
+
+<div class=" rounded-lg border text-center shadow-xl m-5 justify-content-start bg-white">
+    <div class="p-5">
+        <h2 class="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"> Edit Event </h2>
+        <hr />
+
+        <div class="pt-2 pb-2">
+            <form asp-action="EditEvent" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="ActiveEvent.EventId" name="EventId" />
+
+                @if (Context.Request.Cookies["userId"] != null)
+                {
+                    <input type="hidden" name="ActiveEvent.OwnerId" value="@Context.Request.Cookies["userId"]" />
+                    <input type="hidden" name="ActiveEvent.EventId" value="@Model.ActiveEvent.EventId" />
+
+                }
+
+                <div class="mb-3 form-group">
+                    <b> <label asp-for="ActiveEvent.EventTitle" class="control-label">Event Title</label></b>
+                    <input asp-for="ActiveEvent.EventTitle" class="form-control" />
+                    <span asp-validation-for="ActiveEvent.EventTitle" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3 form-group">
+                    <b> <label asp-for="ActiveEvent.Description" class="control-label"> Description</label></b>
+                    <textarea asp-for="ActiveEvent.Description" class="form-control"> </textarea>
+                </div>
+
+                <div class="mb-3 form-group">
+                    <b> <label asp-for="ActiveEvent.Date" class="control-label"> Event Date </label></b>
+                    <input type="date" asp-for="ActiveEvent.Date" class="form-control"> </input>
+                </div>
+
+                <div class="mb-8 form-group">
+                    <input type="submit" value="Edit" class="btn rounded-md bg-indigo-600 mt-3 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mt-2" />
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

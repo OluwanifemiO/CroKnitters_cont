@@ -1,61 +1,62 @@
-﻿@model UserProfileViewModel
+﻿@model EditProfileViewModel
 
 @{
     ViewData["Title"] = " Edit User Profile";
 }
 
+<div class="text-5xl font-extrabold text-center">
+    <span>
+        Edit your Profile Details
+    </span>
+</div>
+
 <div class="justify-content-center rounded-lg border w-auto shadow-xl m-5 bg-white">
     <div class="p-5">
-        <h2 class="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Edit your Profile Details</h2>
         <!--user details-->
-        <hr />
 
         <div class="pt-2 pb-2">
             <form asp-action="EditProfile" method="post" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="@Model.user.UserId" />
-                <input type="hidden" asp-for="@Model.user.Password" value="@Model.user.Password" />
-
+                <input asp-for="@Model.UserId" class="form-control" readonly="readonly" hidden />
+                <input asp-for="@Model.ImageId" class="form-control" readonly="readonly" hidden />
+                <input asp-for="@Model.Password" class="form-control" readonly="readonly" hidden />
 
                 <div class="p-1">
-                    <div class="justify-center text-md-center profilePicture rounded-full ">
+@*                     <div class="justify-center text-md-center profilePicture rounded-full ">
                         <!--profile pic-->
-                        <img src="@("~/img/profile/"+Model.UserImageSrc)" asp-append-version="true" alt="User Profile image" class="rounded-full" />
+                        <img src="@("~/img/profile/"+Model.ImageSrc)" asp-append-version="true" alt="User Profile image" class="rounded-full" />
                     </div>
-
+ *@
                     <!--Change profile pic-->
                         <label>Choose a profile picture:</label>
                         <input type="file" id="UserImageSrc" name="UserImageSrc" accept="image/*">
                         <button type="submit" class="btn">Upload</button>
                 </div>
 
+                <hr />
 
                 <div class="mb-8 form-group">
-                    <b> <label asp-for="@Model.user.Email" class="control-label"></label></b>
-                    <input asp-for="@Model.user.Email" class="form-control" readonly="readonly" />
-                    <span asp-validation-for="@Model.user.Email" class="text-danger"></span>
+                    <b> <label asp-for="@Model.Email" class="control-label"></label></b>
+                    <input asp-for="@Model.Email" class="form-control" readonly="readonly" />
+                    <span asp-validation-for="@Model.Email" class="text-danger"></span>
                 </div>
 
                 <div class="mb-8 form-group">
-                    <b> <label asp-for="@Model.user.Username" class="control-label"></label></b>
-                    <input asp-for="@Model.user.Username" class="form-control" />
-                    <span asp-validation-for="@Model.user.Username" class="text-danger"></span>
-                </div>
-
-                <div class="mb-8 form-group">
-                    <input asp-for="@Model.user.Password" class="form-control" readonly type="hidden" />
+                    <b> <label asp-for="@Model.Username" class="control-label"></label></b>
+                    <input asp-for="@Model.Username" class="form-control" />
+                    <span asp-validation-for="@Model.Username" class="text-danger"></span>
                 </div>
                 
                 <div class="mb-8 form-group">
                     <b> <label class="control-label">First name</label></b>
-                    <input asp-for="@Model.user.FirstName" class="form-control" />
-                    <span asp-validation-for="@Model.user.FirstName" class="text-danger"></span>
+                    <input asp-for="@Model.FirstName" class="form-control" />
+                    <span asp-validation-for="@Model.FirstName" class="text-danger"></span>
                 </div>
 
                 <div class="mb-8 form-group">
                     <b> <label class="control-label">Last name</label></b>
-                    <input asp-for="@Model.user.LastName" class="form-control" />
-                    <span asp-validation-for="@Model.user.LastName" class="text-danger"></span>
+                    <input asp-for="@Model.LastName" class="form-control" />
+                    <span asp-validation-for="@Model.LastName" class="text-danger"></span>
                 </div>
 
                 <div class="mb-8 form-group">
@@ -81,8 +82,8 @@
 
                 <div class="mb-8 form-group">
                     <b> <label class="control-label">Bio</label></b>
-                    <input asp-for="@Model.user.Bio" class="form-control" />
-                    <span asp-validation-for="@Model.user.Bio" class="text-danger"></span>
+                    <input asp-for="@Model.Bio" class="form-control" />
+                    <span asp-validation-for="@Model.Bio" class="text-danger"></span>
                 </div>
 
                 <div class="mb-8 form-group">

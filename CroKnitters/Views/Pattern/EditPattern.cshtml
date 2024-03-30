@@ -15,12 +15,12 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="ActivePattern.PatternId" />
 
-                <!--pattern details: images, id, name, description, creation date, stitch type, stitch count-->
+                @* <!--pattern details: images, id, name, description, creation date, stitch type, stitch count-->
                 <div class="patternImage ">
                     <label for="Images">Upload images for your patterns:</label>
                     <input type="file" id="Images" name="Images" accept="image/*">
                     <button type="submit" class="btn">Upload</button>
-                </div>
+                </div> *@
 
                 @if(TempData["ImageExists"] != null)
                 {

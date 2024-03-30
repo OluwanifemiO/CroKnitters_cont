@@ -7,13 +7,13 @@
 
 <div class="flex">
     <div class="flex-1 rounded-lg border shadow-xl m-5 justify-center bg-white">
-        @* <table class="table table-striped" ">
+        <table class="table table-striped" ">
             <tr>
                 <th class="table-dark">
-                    @Html.DisplayNameFor(model => model[0].EventTitle)
+        @Html.DisplayNameFor(model => model[0].EventTitle)
                 </th>
                 <th class="table-dark">
-                    @Html.DisplayNameFor(model => model[0].Description)
+        @Html.DisplayNameFor(model => model[0].Description)
                 </th>
                 <th class="table-dark"></th>
             </tr>
@@ -30,12 +30,15 @@
                     </td>
 
                     <td>
-                    @Html.ActionLink("Delete", "Delete", new { id = item.EventId }, new{@class="btn btn-danger"})
+                    @* @Html.ActionLink("Delete", "Delete", new { id = item.EventId }, new { @class = "btn btn-danger" }) *@
+                        <form action="@Url.Action("DeleteEvent", "Events", new { id = item.EventId })" method="post">
+                            <button type="submit" style="color: red" class="btn btn-danger">Delete</button>
+                        </form>
                     </td>
                 </tr>
         }
-        </table> *@
+        </table>
 
-        <p>No records to display yet.</p>
+        @* <p>No records to display yet.</p> *@
     </div>
 </div>

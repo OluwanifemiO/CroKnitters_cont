@@ -74,16 +74,18 @@ namespace CroKnitters.Controllers
                             //check if it exists
                             var existingTag = _crochetDbContext.Tags.FirstOrDefault(t => t.TagName == tag);
 
-                            // Tag doesn't exist, create a new one                       
+                            // Tag doesn't exist, create a new one and add it to the project tags                      
                             if (existingTag == null)
                             {
-                                existingTag = new Tag { TagName = projectViewModel.Tags };
+                                existingTag = new Tag { TagName = tag };
                                 _crochetDbContext.Tags.Add(existingTag);
+
+                                projectViewModel.ActiveProject.ProjectTags.Add(new ProjectTag { ProjectId = projectViewModel.ActiveProject.ProjectId, Tag = existingTag });
                             }
                             else
                             {
                                 // Tag already exists, associate with the pattern
-                                projectViewModel.ActiveProject.ProjectTags.Add(new ProjectTag { Tag = existingTag });
+                                projectViewModel.ActiveProject.ProjectTags.Add(new ProjectTag { ProjectId = projectViewModel.ActiveProject.ProjectId, Tag = existingTag });
                             }
                         }
                     }
@@ -268,8 +270,6 @@ namespace CroKnitters.Controllers
                             Console.WriteLine(stream);
                         }
 
-
-                        //var imageSrc = Path.Combine("wwwroot/img/patterns", fileName);
                         var newImage = new Image { ImageSrc = fileName };
                         _crochetDbContext.Images.Add(newImage);
                         //var img = viewModel.ActivePattern.PatternImages.Select(i => i.Image = newImage);
@@ -291,10 +291,10 @@ namespace CroKnitters.Controllers
             if (ModelState.IsValid)
             {
                 //find the project with the id
-               var existingProject = await _crochetDbContext.Projects
-                    .Include(p => p.ProjectTags).ThenInclude(pt => pt.Tag)
-                    .Include(p => p.ProjectImages)
-                    .FirstOrDefaultAsync(p => p == projectViewModel.ActiveProject);
+                var existingProject = await _crochetDbContext.Projects
+                     .Include(p => p.ProjectTags).ThenInclude(pt => pt.Tag)
+                     .Include(p => p.ProjectImages)
+                     .FirstOrDefaultAsync(p => p == projectViewModel.ActiveProject);
 
                 if (existingProject == null)
                 {
@@ -303,8 +303,6 @@ namespace CroKnitters.Controllers
                 }
 
                 UpdateImages(projectViewModel);
-                // Clear existing tags
-                //existingProject.ProjectTags.Clear();
 
                 var splitTags = projectViewModel.Tags.Split(", ").Select(t => t.Trim());
                 // Iterate through the tags in the view model and update tags
@@ -318,12 +316,9 @@ namespace CroKnitters.Controllers
                         if (existingTag == null)
                         {
                             // If the tag doesn't exist, create a new one
-                            existingTag = new Tag { TagName = projectViewModel.Tags };
+                            existingTag = new Tag { TagName = tagName };
                             _crochetDbContext.Tags.Add(existingTag);
                         }
-
-                        // Create a new ProjectTag and associate it with the pattern and tag
-                        existingProject.ProjectTags.Add(new ProjectTag {Project = existingProject, Tag = existingTag });
                     }
                 }
                 // Save changes to the database
@@ -355,7 +350,7 @@ namespace CroKnitters.Controllers
 
             if (project == null)
             {
-                return NotFound();
+                return NotFound("No project found with the specified ID.");
             }
 
             projectViewModel = new ProjectViewModel()
@@ -375,14 +370,64 @@ namespace CroKnitters.Controllers
 
             if (project == null)
             {
-                return NotFound();
+                return NotFound("No project found with the specified ID.");
             }
 
-            // Manually remove related entities
-            _crochetDbContext.ProjectTags.RemoveRange(project.ProjectTags);
-            _crochetDbContext.ProjectImages.RemoveRange(project.ProjectImages);
+            //find tags associated with the project and so on then remove them.
+            var projectTags = _crochetDbContext.ProjectTags
+                    .Include(pt => pt.Tag)
+                    .Where(pt => pt.ProjectId == id);
 
-            // Remove the project
+
+            foreach (var tag in projectTags)
+            {
+                var tags= _crochetDbContext.Tags
+                    .Find(tag.TagId);
+
+                _crochetDbContext.ProjectTags.Remove(tag);
+                _crochetDbContext.Tags.Remove(tags);            
+            }
+
+            //remove projectimages and images
+            var projectImages = _crochetDbContext.ProjectImages
+                    .Include(p => p.Image)
+                    .Where(p => p.ProjectId == id);
+
+            foreach (var image in projectImages)
+            {
+                //find the image
+                var Image = _crochetDbContext.Images
+                   .Find(image.ImageId);
+
+                //delete the image from the folder
+                var imageName = Image.ImageSrc;
+                var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "projects");
+                var filePath = Path.Combine(directoryPath, imageName);
+
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+
+                _crochetDbContext.ProjectImages.Remove(image);
+                _crochetDbContext.Images.Remove(Image);                 
+            }
+
+            //remove projectcomments and comments
+            var projectComments = _crochetDbContext.ProjectComments
+                    .Include(p => p.Comment)
+                    .Where(p => p.ProjectId == id);
+
+            foreach (var comment in projectComments)
+            {
+                var comments = _crochetDbContext.Comments
+                   .Find(comment.CommentId);
+
+                _crochetDbContext.ProjectComments.Remove(comment);
+                _crochetDbContext.Comments.Remove(comments);               
+            }
+
+            // Remove the project lastly
             _crochetDbContext.Projects.Remove(project);
             await _crochetDbContext.SaveChangesAsync();
 

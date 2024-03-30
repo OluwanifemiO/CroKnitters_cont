@@ -19,9 +19,9 @@ public class Comment
 
     public int AdminId { get; set; }
 
-    public User Owner { get; set; } = null!;
+    public User? Owner { get; set; } = null!;
 
-    public Admin Admin { get; set; } = null!;
+    public Admin? Admin { get; set; } = null!;
 
     public ICollection<PatternComment> PatternComments { get; set; } = new List<PatternComment>();
 

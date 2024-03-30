@@ -27,6 +27,7 @@ namespace CroKnitters.Controllers
                     if (user != null)
                     {
                         string userImageSrc = null;
+                        int userImageId = 0;
 
                         // Check if the user has an ImageId
                         if (user.ImageId.HasValue)
@@ -36,6 +37,7 @@ namespace CroKnitters.Controllers
                             if (image != null)
                             {
                                 userImageSrc = image.ImageSrc;
+                                userImageId = image.ImageId;
                             }
                         }
 
@@ -68,12 +70,13 @@ namespace CroKnitters.Controllers
         }
 
         [HttpGet]
-        public ActionResult EditProfile()
+        public ActionResult EditProfile(int id)
         {
-            int userId = int.Parse(Request.Cookies["userId"]!);
-            User user = _db.Users.Find(userId)!;
+            int userId = id;
+            User user = _db.Users.Find(userId);
 
             string userImageSrc = null;
+            int userImageId = 0;
 
             // Check if the user has an ImageId
             if (user.ImageId.HasValue)
@@ -83,14 +86,22 @@ namespace CroKnitters.Controllers
                 if (image != null)
                 {
                     userImageSrc = image.ImageSrc;
+                    userImageId = image.ImageId;
                 }
             }
 
             // Prepare the view model
-            UserProfileViewModel viewModel = new UserProfileViewModel()
+            EditProfileViewModel viewModel = new EditProfileViewModel()
             {
-                user = user,
-                UserImageSrc = userImageSrc
+                UserId = id,
+                 FirstName = user.FirstName,
+                 LastName = user.LastName,
+                 Username = user.Username,
+                 Email = user.Email,
+                 Bio = user.Bio, 
+                 Password = user.Password,
+                 ImageSrc = userImageSrc,
+                 ImageId = userImageId
             };
 
             return View(viewModel);
@@ -98,7 +109,7 @@ namespace CroKnitters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditProfile(UserProfileViewModel userViewModel)
+        public ActionResult EditProfile(EditProfileViewModel userViewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -116,7 +127,52 @@ namespace CroKnitters.Controllers
                 return View(userViewModel);
             }
 
-            _db.Users.Update(userViewModel.user);
+            Image newImage = null;
+
+            if (userViewModel.UserImageSrc != null)
+            {   
+                //retrieve the profile picture if there is one
+                var imageName = userViewModel.UserImageSrc;
+
+                //get the name
+                var fileName = Path.GetFileName(imageName.FileName);
+
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\img\\profile", fileName);
+                Console.WriteLine("filepath for current picture: " + filePath);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    imageName.CopyTo(stream);
+
+                    Console.WriteLine(stream);
+                }
+
+                 newImage = new Image { ImageSrc = fileName };
+                _db.Images.Add(newImage);
+            }
+
+            User updateUser = new User()
+            {
+                UserId = userViewModel.UserId,
+                FirstName = userViewModel.FirstName,
+                LastName = userViewModel.LastName,
+                Email = userViewModel.Email,
+                Username = userViewModel.Username,
+                Bio = userViewModel.Bio,
+                Password = userViewModel.Password
+            };
+
+            // Check if a new image was uploaded and associate it with the user
+            if (userViewModel.UserImageSrc != null)
+            {
+                updateUser.ImageId = newImage.ImageId;
+                updateUser.Image = newImage;
+            }
+            else
+            {
+                updateUser.ImageId = userViewModel.ImageId;
+            }
+
+            _db.Users.Update(updateUser);
             _db.SaveChanges();
 
             return RedirectToAction("Index", "Profile");

@@ -20,18 +20,45 @@ namespace CroKnitters.Controllers
         {
             var feed = new Feed();
 
-            
+            //query the patterns and projects
             var patternsQuery = _crochetDbContext.Patterns.AsQueryable();
 
             var projectsQuery = _crochetDbContext.Projects.AsQueryable();
 
+            //show appropriate results is the search entry is not empty
             if (!string.IsNullOrEmpty(search))
             {
                 patternsQuery = patternsQuery.Where(p => p.PatternName.Contains(search));
                 projectsQuery = projectsQuery.Where(p => p.ProjectName.Contains(search));
-            }
 
-            var patterns = patternsQuery
+
+                var patterns = patternsQuery
+                    .Include(p => p.PatternImages)
+                    .Include(p => p.PatternComments)
+                    .Include(p => p.Owner)
+                    .Select(p => new PatternSummaryViewModel
+                    {
+                        ActivePattern = p,
+                        NumberOfComments = p.PatternComments.Count,
+                        Images = p.PatternImages.Select(img => img.Image.ImageSrc).ToList()
+                    }).ToList();
+
+                var projects = projectsQuery
+                    .Include(p => p.ProjectImages)
+                    .Include(p => p.ProjectComments)
+                    .Select(p => new ProjectSummaryViewModel
+                    {
+                        ActiveProject = p,
+                        NumberOfComments = p.ProjectComments.Count,
+                        Images = p.ProjectImages.Select(img => img.Image.ImageSrc).ToList()
+                    }).ToList();
+
+                feed.Patterns = patterns;
+                feed.Projects = projects;
+            }
+            else //otherwise show all the patterns and projects 
+            {
+                var patterns = patternsQuery
                 .Include(p => p.PatternImages)
                 .Include(p => p.PatternComments)
                 .Include(p => p.Owner)
@@ -42,18 +69,20 @@ namespace CroKnitters.Controllers
                     Images = p.PatternImages.Select(img => img.Image.ImageSrc).ToList() 
                 }).ToList();
 
-            var projects = projectsQuery
-                .Include(p => p.ProjectImages)
-                .Include(p => p.ProjectComments)
-                .Select(p => new ProjectSummaryViewModel
-                {
-                    ActiveProject = p,
-                    NumberOfComments = p.ProjectComments.Count,
-                    Images = p.ProjectImages.Select(img => img.Image.ImageSrc).ToList() 
-                }).ToList();
+                var projects = projectsQuery
+                    .Include(p => p.ProjectImages)
+                    .Include(p => p.ProjectComments)
+                    .Include(p => p.Owner)
+                    .Select(p => new ProjectSummaryViewModel
+                    {
+                        ActiveProject = p,
+                        NumberOfComments = p.ProjectComments.Count,
+                        Images = p.ProjectImages.Select(img => img.Image.ImageSrc).ToList() 
+                    }).ToList();
 
-            feed.Patterns = patterns;
-            feed.Projects = projects;
+                feed.Patterns = patterns;
+                feed.Projects = projects;
+            }
 
             return View(feed);
         }

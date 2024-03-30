@@ -79,11 +79,13 @@ namespace CroKnitters.Controllers
                             {
                                 existingTag = new Tag { TagName = tag };
                                 _crochetDbContext.Tags.Add(existingTag);
+
+                                patternViewModel.ActivePattern.PatternTags.Add(new PatternTag { PatternId = patternViewModel.ActivePattern.PatternId, Tag = existingTag });
                             }
                             else
                             {
                                 // Tag already exists, associate with the pattern
-                                patternViewModel.ActivePattern.PatternTags.Add(new PatternTag { Tag = existingTag });
+                                patternViewModel.ActivePattern.PatternTags.Add(new PatternTag { PatternId= patternViewModel.ActivePattern.PatternId, Tag = existingTag });
                             }
                         }
                     }
@@ -327,9 +329,6 @@ namespace CroKnitters.Controllers
 
                 UpdateImages(patternViewModel);
 
-                //// Clear existing tags
-                //existingPattern.PatternTags.Clear();
-
                 //first split the string of incoming tags
                 var splitTags = patternViewModel.Tags.Split(", ").Select(t => t.Trim());
 
@@ -345,13 +344,9 @@ namespace CroKnitters.Controllers
                         {
                             // If the tag doesn't exist, create a new one
                             existingTag = new Tag { TagName = tagName };
-                            _crochetDbContext.Tags.Add(existingTag);
-
-                            
+                            _crochetDbContext.Tags.Add(existingTag);                        
                         }
 
-                        // Create a new PatternTag and associate it with the pattern and tag
-                        existingPattern.PatternTags.Add(new PatternTag {Pattern = existingPattern, Tag = existingTag });
                     }
                 }
 
@@ -410,11 +405,61 @@ namespace CroKnitters.Controllers
                 return NotFound();
             }
 
-            // Manually remove related entities
-            _crochetDbContext.PatternTags.RemoveRange(pattern.PatternTags);
-            _crochetDbContext.PatternImage.RemoveRange(pattern.PatternImages);
+            //find tags associated with the pattern and so on then remove them.
+            var patternTags = _crochetDbContext.PatternTags
+                    .Include(pt => pt.Tag)
+                    .Where(pt => pt.PatternId == id);
 
-            // Remove the pattern
+
+            foreach (var tag in patternTags)
+            {
+                var tags = _crochetDbContext.Tags
+                    .Find(tag.TagId);
+
+                _crochetDbContext.PatternTags.Remove(tag);
+                _crochetDbContext.Tags.Remove(tags);
+            }
+
+            //remove patternimages and images
+            var patternImages = _crochetDbContext.PatternImage
+                    .Include(p => p.Image)
+                    .Where(p => p.PatternId == id);
+
+            foreach (var image in patternImages)
+            {
+                //find the image
+                var Image = _crochetDbContext.Images
+                   .Find(image.ImageId);
+
+                //delete the image from the folder
+                var imageName = Image.ImageSrc;
+                var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "patterns");
+                var filePath = Path.Combine(directoryPath, imageName);
+
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+
+                _crochetDbContext.PatternImage.Remove(image);
+                _crochetDbContext.Images.Remove(Image);
+            }
+
+            //remove patterncomments and comments
+            var patternComments = _crochetDbContext.PatternComments
+                    .Include(p => p.Comment)
+                    .Where(p => p.PatternId == id);
+
+            foreach (var comment in patternComments)
+            {
+                var comments = _crochetDbContext.Comments
+                   .Find(comment.CommentId);
+
+                _crochetDbContext.PatternComments.Remove(comment);
+                _crochetDbContext.Comments.Remove(comments);
+            }
+
+            // Remove the pattern lastly
             _crochetDbContext.Patterns.Remove(pattern);
             await _crochetDbContext.SaveChangesAsync();
 
