@@ -672,6 +672,16 @@ public partial class CrochetAppDbContext : DbContext
               new Project() { ProjectId = 6, ProjectName = "Crochet Coasters", Description = "Set of coasters for the dining table, featuring a floral motif.", CreationDate = DateTime.Now.AddDays(-15), Likes = 40, Status = "Completed", OwnerId = 3 }
               );
 
+        //seed into projectpatterns
+        modelBuilder.Entity<ProjectPattern>().HasData(
+            new ProjectPattern() { ProPatId = 1, ProjectId = 1, PatternId = 8 },
+            new ProjectPattern() { ProPatId = 2, ProjectId = 2, PatternId = 7 },
+            new ProjectPattern() { ProPatId = 3, ProjectId = 3, PatternId = 4 },
+            new ProjectPattern() { ProPatId = 4, ProjectId = 4, PatternId = 6 },
+            new ProjectPattern() { ProPatId = 5, ProjectId = 5, PatternId = 3 },
+            new ProjectPattern() { ProPatId = 6, ProjectId = 6, PatternId = 1 }
+            );
+
         //seed into theme
         modelBuilder.Entity<Theme>().HasData(
             new Theme() { ThemeId = 1, ThemeTitle = "Light" },

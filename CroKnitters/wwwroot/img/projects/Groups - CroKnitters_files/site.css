@@ -1,0 +1,155 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    background-color:aliceblue;
+}
+nav{
+    height: 150px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 16px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 3px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content a {
+    background-color: #6366f1;
+}
+
+.profilePicture  {
+    font-size: 200px;
+}
+
+.search{
+    text-align:center;
+    width:800px;
+    margin-left:300px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.grid-item {
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+    .grid-item img {
+        width: 100%;
+        height: auto;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .grid-item h3 {
+        margin: 10px 0;
+        font-size: 1rem;
+        color: #333;
+    }
+
+    .grid-item p {
+        margin: 0;
+        font-size: 0.875rem;
+        color: #666;
+    }
+    .chats-list{
+        width:200px;
+    }
+
+    .messages{
+        width: 1000px;
+    }
+
+.rounded-full {
+    border-radius: 9999px;
+}
+.h-12 {
+    height: 3rem;
+}
+.w-12 {
+    width: 3rem;
+}
+.gap-x-4 {
+    column-gap: 1rem;
+}
+
+.flex-auto {
+    flex: 1 1 auto;
+}
+.truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.font-semibold {
+    font-weight: 600;
+}
+
+.message {
+    padding: 5px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.sent {
+    align-self: flex-end; /* Align sent messages to the right */
+}
+
+.received {
+    align-self: flex-start; /* Align received messages to the left */
+}
+
+#message-input {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+

@@ -50,10 +50,26 @@ namespace CroKnitters.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult DeleteComment(int id)
+        {
+            Comment comment = _dbContext.Comments.Find(id);
+
+            if (comment == null)
+            {
+                return Json(new { success = false, message = "Comment not found." });
+            }
+
+            _dbContext.Comments.Remove(comment);
+            _dbContext.SaveChanges();
+
+            return Json(new { success = true });
+        }
+
         private ActionResult HttpNotFound()
         {
             throw new NotImplementedException();
         }
     }
 }
-

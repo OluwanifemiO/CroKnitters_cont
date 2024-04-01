@@ -18,6 +18,7 @@ namespace CroKnitters.Models
 
         public PrivateChat PrivateChat { get; set; }
 
-        public IEnumerable<User> users { get; set; }
+        public List<User> users { get; set; }
+
     }
 }

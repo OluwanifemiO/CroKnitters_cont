@@ -208,13 +208,103 @@ namespace CroKnitters.Controllers
                 Owner = projectViewModel.Owner.FirstName + " " + projectViewModel.Owner.LastName
             };
 
+            // Get associated patterns
+            List<PatternSummaryViewModel> associatedPatterns = GetAssociatedPatterns(id);
+            ViewBag.AssociatedPatterns = associatedPatterns;
+
             return View("ProjectDetails", projectDetailViewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AddPattern(int id)
+        {
+            //find the project
+            var existingProject = await _crochetDbContext.Projects
+                .Include(p => p.ProjectTags).ThenInclude(pt => pt.Tag)
+                .Include(p => p.ProjectImages)
+                .FirstOrDefaultAsync(p => p.ProjectId == id);
+
+            //get all patterns
+            var allPatterns = await _crochetDbContext.Patterns
+                .ToListAsync();
+
+            ProjectPatternViewModel viewModel = new ProjectPatternViewModel()
+            {
+                ActiveProjectId = existingProject.ProjectId,
+                allPatterns = allPatterns
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddPattern(ProjectPatternViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                // Retrieve the project using the provided project identifier
+                //var existingProject = await _crochetDbContext.Projects
+                //    .Include(p => p.ProjectTags).ThenInclude(pt => pt.Tag)
+                //    .Include(p => p.ProjectImages)
+                //    .FirstOrDefaultAsync(p => p.ProjectId == viewModel.ActiveProject.ProjectId);
+
+                if (viewModel.associatedPatternId != null)
+                {
+                    //find the pattern
+                    var pattern = _crochetDbContext.Patterns
+                        .Find(viewModel.associatedPatternId);
+
+                    //add the pattern to the project pattern 
+                    _crochetDbContext.ProjectPatterns.Add(new ProjectPattern { ProjectId = viewModel.ActiveProjectId, PatternId = pattern.PatternId });
+                    _crochetDbContext.SaveChanges();
+
+                    // Get associated patterns
+                    List<PatternSummaryViewModel> associatedPatterns = GetAssociatedPatterns(viewModel.ActiveProjectId);
+                    ViewBag.AssociatedPatterns = associatedPatterns;
+
+                    return RedirectToAction("Details", "Project", new { id = viewModel.ActiveProjectId });
+                }
+            }
+
+            // Repopulate allPatterns
+            //viewModel.allPatterns = await _crochetDbContext.Patterns.ToListAsync(); 
+            foreach (var key in ModelState.Keys)
+            {
+                var state = ModelState[key];
+                foreach (var error in state.Errors)
+                {
+                    Console.WriteLine($"Key: {key}, Error: {error.ErrorMessage}");
+                }
+            }
+
+            return RedirectToAction("Details", "Projects", viewModel.ActiveProjectId);
+        }
+
+        public List<PatternSummaryViewModel> GetAssociatedPatterns(int id)
+        {
+            List<PatternSummaryViewModel> associatedPatterns = _crochetDbContext.ProjectPatterns
+                         .Include(p => p.Pattern)
+                         .ThenInclude(p => p.Owner)
+                         .Include(p => p.Pattern.PatternImages)
+                         .ThenInclude(p => p.Image)
+                         .Include(p => p.Pattern.PatternComments)
+                         .ThenInclude(p => p.Comment)
+                         .Where(pp => pp.ProjectId == id)
+                         .Select(pp => new PatternSummaryViewModel()
+                         {
+                             ActivePattern = pp.Pattern,
+                             NumberOfComments = pp.Pattern.PatternComments.Count(),
+                             Images = pp.Pattern.PatternImages.Select(pi => pi.Image.ImageSrc).ToList()
+                         })
+                         .ToList();
+
+            return associatedPatterns;
         }
 
         [HttpGet]
         public async Task<IActionResult> EditProject(int id)
         {
-            //find the pattern with the id
+            //find the project with the id
             var existingProject = await _crochetDbContext.Projects
                 .Include(p => p.ProjectTags).ThenInclude(pt => pt.Tag)
                 .Include(p => p.ProjectImages)
@@ -381,11 +471,11 @@ namespace CroKnitters.Controllers
 
             foreach (var tag in projectTags)
             {
-                var tags= _crochetDbContext.Tags
+                var tags = _crochetDbContext.Tags
                     .Find(tag.TagId);
 
                 _crochetDbContext.ProjectTags.Remove(tag);
-                _crochetDbContext.Tags.Remove(tags);            
+                _crochetDbContext.Tags.Remove(tags);
             }
 
             //remove projectimages and images
@@ -410,7 +500,7 @@ namespace CroKnitters.Controllers
                 }
 
                 _crochetDbContext.ProjectImages.Remove(image);
-                _crochetDbContext.Images.Remove(Image);                 
+                _crochetDbContext.Images.Remove(Image);
             }
 
             //remove projectcomments and comments
@@ -424,8 +514,16 @@ namespace CroKnitters.Controllers
                    .Find(comment.CommentId);
 
                 _crochetDbContext.ProjectComments.Remove(comment);
-                _crochetDbContext.Comments.Remove(comments);               
+                _crochetDbContext.Comments.Remove(comments);
             }
+
+            // Retrieve project patterns associated with the project
+            var projectPatterns = _crochetDbContext.ProjectPatterns
+                .Where(pp => pp.ProjectId == id)
+                .ToList(); 
+
+            // Delete project patterns
+            _crochetDbContext.ProjectPatterns.RemoveRange(projectPatterns);
 
             // Remove the project lastly
             _crochetDbContext.Projects.Remove(project);

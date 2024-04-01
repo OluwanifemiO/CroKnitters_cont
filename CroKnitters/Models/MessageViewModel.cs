@@ -1,4 +1,6 @@
-﻿namespace CroKnitters.Models
+﻿using CroKnitters.Entities;
+
+namespace CroKnitters.Models
 {
     public class MessageViewModel
     {
@@ -9,5 +11,9 @@
         public string Content { get; set; }
 
         public DateTime SentTime { get; set; }
+
+        public User senderInfo {  get; set; }
+
+        public User receiverInfo {  get; set; }
     }
 }

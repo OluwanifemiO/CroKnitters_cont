@@ -4,6 +4,7 @@ using CroKnitters.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace CroKnitters.Controllers
@@ -12,12 +13,14 @@ namespace CroKnitters.Controllers
     public class GroupsController : Controller
     {
         private CrochetAppDbContext _context;
-        private IHubContext<PrivateChatHub> _chat;
+        private IHubContext<GroupChatHub> _chat;
+        private IMemoryCache _memoryCache;
 
-        public GroupsController(CrochetAppDbContext context, IHubContext<PrivateChatHub> chat)
+        public GroupsController(CrochetAppDbContext context, IHubContext<GroupChatHub> chat, IMemoryCache memoryCache)
         {
             _context = context;
             _chat = chat;
+            _memoryCache = memoryCache;
         }
 
 
@@ -29,7 +32,7 @@ namespace CroKnitters.Controllers
             var currentUserId = int.Parse(Request.Cookies["userId"]!);
 
             //get all groups
-            var allGroups = _context.Groups.ToList();
+            var allGroups = _context.Groups.Include(g => g.GroupUsers).ToList();
 
             var userGroups = await _context.Groups
                     .Include(g => g.GroupUsers)
@@ -40,17 +43,34 @@ namespace CroKnitters.Controllers
                         GroupName = g.GroupName,
                         Description = g.Description,
                         CreationDate = g.CreationDate,
-                        groups = allGroups,
                         MemberCount = g.GroupUsers.Count()
                     })
                     .ToListAsync();
+
+            //
+            ViewBag.groups = allGroups;
 
             return View(userGroups);
         }
 
 
+        [HttpGet("[action]")]
+        public async Task<IActionResult> MoreGroups()
+        {
+            //get user id
+            var currentUserId = int.Parse(Request.Cookies["userId"]!);
+
+            var allGroups = await _context.Groups
+                    .Include(g => g.GroupUsers)
+                    .Where(g => g.GroupUsers.Any(gu => gu.UserId != currentUserId))
+                    .ToListAsync();
+
+            return View(allGroups);
+        }
+
+
         [HttpGet("[action]/{id}")]
-        public IActionResult GetChat(int id)
+        public async Task<IActionResult> GetChat(int id)
         {
             // Get user id
             var currentUserId = int.Parse(Request.Cookies["userId"]);
@@ -72,7 +92,8 @@ namespace CroKnitters.Controllers
                     SenderId = gc.Message.SenderId.ToString(),
                     //ReceiverId = gc.Message.ReceiverId.ToString(),
                     Content = gc.Message.Content,
-                    SentTime = gc.Message.CreationDate 
+                    SentTime = gc.Message.CreationDate ,
+                    senderInfo = _context.Users.FirstOrDefault(u => u.UserId == gc.Message.SenderId)
                 })
                 .ToList();
 
@@ -84,7 +105,14 @@ namespace CroKnitters.Controllers
                 viewModel = chatHistory 
             };
 
-           
+            //get group
+            var group = _context.Groups.Find(id);
+
+            var connectionId = _memoryCache.Get<string>("ConnectionId");
+            Console.WriteLine("connection ID: " + connectionId);
+
+            //add the group to chathub groups
+            await _chat.Groups.AddToGroupAsync(connectionId, group.GroupName);
 
             // Pass the view model to the view
             return View("GroupChat", viewModel);
@@ -128,6 +156,12 @@ namespace CroKnitters.Controllers
                 _context.GroupUsers.Add(newGroupUser);
                 await _context.SaveChangesAsync();
 
+                var connectionId = _memoryCache.Get<string>("ConnectionId");
+                Console.WriteLine("connection ID: " + connectionId);
+
+                //add the group to chathub groups
+                await _chat.Groups.AddToGroupAsync(connectionId, newGroup.GroupName);
+
                 return RedirectToAction("Index");
             }
 
@@ -144,11 +178,17 @@ namespace CroKnitters.Controllers
             return RedirectToAction("CreateGroup");
         }
 
-        [HttpGet("[action]/{connectionId}/{id}")] //if a user wants to join a new group, get the id of that group
-        public async Task<IActionResult> JoinGroup(string connectionId, int id)
+        [HttpGet("[action]/{id}")] //if a user wants to join a new group, get the id of that group
+        public async Task<IActionResult> JoinGroup(int id)
         {
             //get user id
             var currentUserId = int.Parse(Request.Cookies["userId"]!);
+
+            //if the user already isn't a group user
+            //if ()
+            //{
+
+            //}
 
             //create a new group user object and add the user to it
             var groupUser = new GroupUser()
@@ -160,15 +200,20 @@ namespace CroKnitters.Controllers
             _context.GroupUsers.Add(groupUser);
             await _context.SaveChangesAsync();
 
+            ////get the connectionId from the cache
+            //var connectionId = _memoryCache.Get<string>("ConnectionId");
+
+            //await _chat.Groups.AddToGroupAsync(connectionId, groupName);
+
             //take them to the group chat
-            return RedirectToAction("GetChat", new {id = id});
+            return RedirectToAction("GetChat", new {id = id });
         }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> SendMessage(string senderId, string message, string groupId)
         {
             Console.WriteLine("sent data: sender ID:" + senderId + " , message content: " + message +" , group id: " + groupId);
-            //var currentUserId = int.Parse(Context.GetHttpContext().Request.Cookies["userId"]!); // Get the current user id
+
             var SenderId = int.Parse(senderId);
 
             var GroupId = int.Parse(groupId);
@@ -179,6 +224,7 @@ namespace CroKnitters.Controllers
             //find the group
             var group = await _context.Groups.FindAsync(GroupId);
             Console.WriteLine(group.GroupName);
+
             //save the data in the message model to the db 
             var msg = new Message()
             {
@@ -199,7 +245,10 @@ namespace CroKnitters.Controllers
             _context.GroupChat.Add(chat);
             await _context.SaveChangesAsync();
 
-            //await _chat.Groups.AddToGroupAsync(Context.connectionId, groupName);
+            var connectionId = _memoryCache.Get<string>("ConnectionId");
+            Console.WriteLine("connection ID: " + connectionId);
+
+            await _chat.Groups.AddToGroupAsync(connectionId, group.GroupName);
 
             //as the message is sent, let the other user receive the message on their end then return an Ok result
             await _chat.Clients.Group(group.GroupName).SendAsync("RecieveMessage", new

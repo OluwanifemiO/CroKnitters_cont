@@ -502,7 +502,7 @@ namespace CroKnitters.Migrations
                             AdminId = 1,
                             ApprovalStatus = true,
                             Content = "Very pretty!",
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(6975),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9406),
                             Likes = 10,
                             OwnerId = 1
                         },
@@ -512,7 +512,7 @@ namespace CroKnitters.Migrations
                             AdminId = 2,
                             ApprovalStatus = true,
                             Content = "Super cute!",
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(6998),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9416),
                             Likes = 20,
                             OwnerId = 2
                         },
@@ -522,7 +522,7 @@ namespace CroKnitters.Migrations
                             AdminId = 1,
                             ApprovalStatus = true,
                             Content = "Love the colors!",
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7005),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9423),
                             Likes = 15,
                             OwnerId = 3
                         },
@@ -532,7 +532,7 @@ namespace CroKnitters.Migrations
                             AdminId = 1,
                             ApprovalStatus = false,
                             Content = "Shitty job!",
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7011),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9429),
                             Likes = 12,
                             OwnerId = 4
                         });
@@ -575,7 +575,7 @@ namespace CroKnitters.Migrations
                         new
                         {
                             EventId = 1,
-                            Date = new DateTime(2024, 6, 14, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7169),
+                            Date = new DateTime(2024, 6, 18, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9585),
                             Description = "Don't miss out on amazing deals at our annual yarn sale! From colorful skeins to luxurious blends, we've got something for every project. See you there!",
                             EventTitle = "Yarn sale at Kitchener, Ontario.",
                             OwnerId = 1
@@ -583,7 +583,7 @@ namespace CroKnitters.Migrations
                         new
                         {
                             EventId = 2,
-                            Date = new DateTime(2024, 6, 4, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7191),
+                            Date = new DateTime(2024, 6, 8, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9593),
                             Description = "Join us for an inspiring evening as local crafters showcase their latest creations. From intricate afghans to cozy scarves, you'll find plenty of ideas to spark your creativity.",
                             EventTitle = "Project showcase at Toronto, Ontario",
                             OwnerId = 2
@@ -591,7 +591,7 @@ namespace CroKnitters.Migrations
                         new
                         {
                             EventId = 3,
-                            Date = new DateTime(2024, 5, 25, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7198),
+                            Date = new DateTime(2024, 5, 29, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9599),
                             Description = "Learn the art of crochet from experienced instructors in a fun and supportive environment. Whether you're a complete beginner or looking to refine your skills, this workshop is perfect for you!",
                             EventTitle = "Crochet workshop in Vancouver, BC",
                             OwnerId = 3
@@ -607,7 +607,7 @@ namespace CroKnitters.Migrations
                         new
                         {
                             EventId = 5,
-                            Date = new DateTime(2024, 5, 15, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7209),
+                            Date = new DateTime(2024, 5, 19, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9608),
                             Description = "Join us for a virtual crochet class designed for beginners. Learn essential stitches and techniques from the comfort of your own home, with personalized instruction and plenty of support.",
                             EventTitle = "Online Crochet Class - Beginners Welcome!",
                             OwnerId = 2
@@ -615,7 +615,7 @@ namespace CroKnitters.Migrations
                         new
                         {
                             EventId = 6,
-                            Date = new DateTime(2024, 6, 14, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7215),
+                            Date = new DateTime(2024, 6, 18, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9614),
                             Description = "Trade your stash and discover new treasures at our yarn swap meet. Bring your unwanted yarn and notions to exchange with fellow crafters, and leave with fresh inspiration for your next project.",
                             EventTitle = "Local Yarn Swap Meet in Calgary, AB",
                             OwnerId = 4
@@ -774,21 +774,21 @@ namespace CroKnitters.Migrations
                         new
                         {
                             GroupId = 1,
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7290),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9713),
                             Description = "Some lazy people coming together to motivate one another.",
                             GroupName = "Lazy Crocheters community"
                         },
                         new
                         {
                             GroupId = 2,
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7325),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9722),
                             Description = "Weekend warriors unite for crochet projects big and small. All skill levels welcome.",
                             GroupName = "Weekend Crochet Warriors"
                         },
                         new
                         {
                             GroupId = 3,
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7333),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9728),
                             Description = "A community focused on using eco-friendly and sustainable materials in our crochet and knitting projects.",
                             GroupName = "Eco-Friendly Fiber Artists"
                         });
@@ -1111,84 +1111,84 @@ namespace CroKnitters.Migrations
                         {
                             MessageId = 1,
                             Content = "Hey everyone! Excited to join this group.",
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7452),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9852),
                             SenderId = 1
                         },
                         new
                         {
                             MessageId = 2,
                             Content = "Welcome! Looking forward to seeing your projects.",
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7463),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9860),
                             SenderId = 2
                         },
                         new
                         {
                             MessageId = 3,
                             Content = "Does anyone have tips for a beginner?",
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7470),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9866),
                             SenderId = 3
                         },
                         new
                         {
                             MessageId = 4,
                             Content = "Sure! I'd recommend starting with simple patterns and bulky yarn. It's easier to see your stitches.",
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7476),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9872),
                             SenderId = 4
                         },
                         new
                         {
                             MessageId = 5,
                             Content = "I'm trying to find eco-friendly yarn. Any brand recommendations?",
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7482),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9878),
                             SenderId = 2
                         },
                         new
                         {
                             MessageId = 6,
                             Content = "I love using bamboo and recycled cotton yarns. They're great for the environment and work well for many projects.",
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7489),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9883),
                             SenderId = 4
                         },
                         new
                         {
                             MessageId = 7,
                             Content = "Hey! How's it going?",
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7495),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9889),
                             SenderId = 1
                         },
                         new
                         {
                             MessageId = 8,
                             Content = "Hi there! Not bad, just working on a new project. How about you?",
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7501),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9894),
                             SenderId = 2
                         },
                         new
                         {
                             MessageId = 9,
                             Content = "Hey! What kind of project are you working on?",
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7508),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9900),
                             SenderId = 1
                         },
                         new
                         {
                             MessageId = 10,
                             Content = "I'm trying out a new crochet pattern for a scarf. It's a bit challenging, but fun!",
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7519),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9907),
                             SenderId = 3
                         },
                         new
                         {
                             MessageId = 11,
                             Content = "Hello! Do you have a favorite type of yarn you like to use?",
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7526),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9914),
                             SenderId = 1
                         },
                         new
                         {
                             MessageId = 12,
                             Content = "I love using soft merino wool for scarves. It gives a cozy feel. How about you?",
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7531),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9920),
                             SenderId = 4
                         });
                 });
@@ -1628,7 +1628,7 @@ namespace CroKnitters.Migrations
                         new
                         {
                             PChatId = 1,
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(7998),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 744, DateTimeKind.Local).AddTicks(471),
                             MessageId = 7,
                             RecieverId = 2,
                             SenderId = 1
@@ -1636,7 +1636,7 @@ namespace CroKnitters.Migrations
                         new
                         {
                             PChatId = 2,
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(8072),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 744, DateTimeKind.Local).AddTicks(490),
                             MessageId = 8,
                             RecieverId = 1,
                             SenderId = 2
@@ -1644,7 +1644,7 @@ namespace CroKnitters.Migrations
                         new
                         {
                             PChatId = 3,
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(8079),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 744, DateTimeKind.Local).AddTicks(496),
                             MessageId = 9,
                             RecieverId = 3,
                             SenderId = 1
@@ -1652,7 +1652,7 @@ namespace CroKnitters.Migrations
                         new
                         {
                             PChatId = 4,
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(8085),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 744, DateTimeKind.Local).AddTicks(502),
                             MessageId = 10,
                             RecieverId = 1,
                             SenderId = 3
@@ -1660,7 +1660,7 @@ namespace CroKnitters.Migrations
                         new
                         {
                             PChatId = 5,
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(8092),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 744, DateTimeKind.Local).AddTicks(507),
                             MessageId = 11,
                             RecieverId = 4,
                             SenderId = 1
@@ -1668,7 +1668,7 @@ namespace CroKnitters.Migrations
                         new
                         {
                             PChatId = 6,
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(8098),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 744, DateTimeKind.Local).AddTicks(513),
                             MessageId = 12,
                             RecieverId = 1,
                             SenderId = 4
@@ -1738,7 +1738,7 @@ namespace CroKnitters.Migrations
                         new
                         {
                             ProjectId = 2,
-                            CreationDate = new DateTime(2024, 3, 16, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(6672),
+                            CreationDate = new DateTime(2024, 3, 20, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9111),
                             Description = "A warm scarf for the winter season, using a bobble stitch pattern.",
                             Likes = 75,
                             OwnerId = 2,
@@ -1748,7 +1748,7 @@ namespace CroKnitters.Migrations
                         new
                         {
                             ProjectId = 3,
-                            CreationDate = new DateTime(2024, 3, 6, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(6747),
+                            CreationDate = new DateTime(2024, 3, 10, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9174),
                             Description = "A colorful blanket made from granny squares. Each square features a different color, aiming for a vibrant look.",
                             Likes = 90,
                             OwnerId = 3,
@@ -1758,7 +1758,7 @@ namespace CroKnitters.Migrations
                         new
                         {
                             ProjectId = 4,
-                            CreationDate = new DateTime(2024, 3, 21, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(6756),
+                            CreationDate = new DateTime(2024, 3, 25, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9181),
                             Description = "A cute bunny amigurumi project for the upcoming Easter holidays.",
                             Likes = 120,
                             OwnerId = 1,
@@ -1768,7 +1768,7 @@ namespace CroKnitters.Migrations
                         new
                         {
                             ProjectId = 5,
-                            CreationDate = new DateTime(2024, 2, 25, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(6766),
+                            CreationDate = new DateTime(2024, 2, 29, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9189),
                             Description = "A light and breezy top perfect for summer, using cotton yarn.",
                             Likes = 65,
                             OwnerId = 2,
@@ -1778,7 +1778,7 @@ namespace CroKnitters.Migrations
                         new
                         {
                             ProjectId = 6,
-                            CreationDate = new DateTime(2024, 3, 11, 7, 41, 42, 493, DateTimeKind.Local).AddTicks(6776),
+                            CreationDate = new DateTime(2024, 3, 15, 9, 36, 8, 743, DateTimeKind.Local).AddTicks(9197),
                             Description = "Set of coasters for the dining table, featuring a floral motif.",
                             Likes = 40,
                             OwnerId = 3,
@@ -1933,6 +1933,44 @@ namespace CroKnitters.Migrations
                     b.HasIndex("ProjectId");
 
                     b.ToTable("ProjectPatterns");
+
+                    b.HasData(
+                        new
+                        {
+                            ProPatId = 1,
+                            PatternId = 8,
+                            ProjectId = 1
+                        },
+                        new
+                        {
+                            ProPatId = 2,
+                            PatternId = 7,
+                            ProjectId = 2
+                        },
+                        new
+                        {
+                            ProPatId = 3,
+                            PatternId = 4,
+                            ProjectId = 3
+                        },
+                        new
+                        {
+                            ProPatId = 4,
+                            PatternId = 6,
+                            ProjectId = 4
+                        },
+                        new
+                        {
+                            ProPatId = 5,
+                            PatternId = 3,
+                            ProjectId = 5
+                        },
+                        new
+                        {
+                            ProPatId = 6,
+                            PatternId = 1,
+                            ProjectId = 6
+                        });
                 });
 
             modelBuilder.Entity("CroKnitters.Entities.ProjectTag", b =>

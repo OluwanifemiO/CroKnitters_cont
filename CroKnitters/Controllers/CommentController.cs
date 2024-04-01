@@ -183,6 +183,31 @@ namespace CroKnitters.Controllers
 
         }
 
+        public async Task<IActionResult> AdminDeleteComment(int id)
+        {
+            // Find the comment
+            var Comment = await _crochetDbContext.Comments
+                   .Include(p => p.ProjectComments).Include(p => p.PatternComments)
+                   .FirstOrDefaultAsync(p => p.CommentId == id);
+
+            if (Comment == null)
+            {
+                return NotFound();
+            }
+
+
+            _crochetDbContext.ProjectComments.RemoveRange(Comment.ProjectComments);
+            _crochetDbContext.PatternComments.RemoveRange(Comment.PatternComments);
+
+
+            // Remove the comment
+            _crochetDbContext.Comments.Remove(Comment);
+            await _crochetDbContext.SaveChangesAsync();
+
+            return Ok();
+
+        }
+
         [HttpGet]
         public async Task<IActionResult> EditComment(int id)
         {

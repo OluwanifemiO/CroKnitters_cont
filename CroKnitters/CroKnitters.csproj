@@ -26,6 +26,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\img\profile\" />
     <Folder Include="wwwroot\img\projects\" />
+    <Folder Include="wwwroot\lib\microsoft\signalr\dist\browser\" />
   </ItemGroup>
 
 </Project>

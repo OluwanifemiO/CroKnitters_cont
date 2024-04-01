@@ -25,6 +25,10 @@
       "PackagePath": "staticwebassets\\img\\15709220.jpeg"
     },
     {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\Logo_page.png",
+      "PackagePath": "staticwebassets\\img\\Logo_page.png"
+    },
+    {
       "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\background.jpg",
       "PackagePath": "staticwebassets\\img\\background.jpg"
     },
@@ -85,16 +89,68 @@
       "PackagePath": "staticwebassets\\img\\profile\\image_two.jpg"
     },
     {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\Groups - CroKnitters.htm",
+      "PackagePath": "staticwebassets\\img\\projects\\Groups - CroKnitters.htm"
+    },
+    {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\Groups - CroKnitters_files\\CroKnitters.styles.css",
+      "PackagePath": "staticwebassets\\img\\projects\\Groups - CroKnitters_files\\CroKnitters.styles.css"
+    },
+    {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\Groups - CroKnitters_files\\aspnetcore-browser-refresh.js",
+      "PackagePath": "staticwebassets\\img\\projects\\Groups - CroKnitters_files\\aspnetcore-browser-refresh.js"
+    },
+    {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\Groups - CroKnitters_files\\axios.min.js",
+      "PackagePath": "staticwebassets\\img\\projects\\Groups - CroKnitters_files\\axios.min.js"
+    },
+    {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\Groups - CroKnitters_files\\bootstrap-icons.css",
+      "PackagePath": "staticwebassets\\img\\projects\\Groups - CroKnitters_files\\bootstrap-icons.css"
+    },
+    {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\Groups - CroKnitters_files\\bootstrap.bundle.min.js",
+      "PackagePath": "staticwebassets\\img\\projects\\Groups - CroKnitters_files\\bootstrap.bundle.min.js"
+    },
+    {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\Groups - CroKnitters_files\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\img\\projects\\Groups - CroKnitters_files\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\Groups - CroKnitters_files\\browserLink",
+      "PackagePath": "staticwebassets\\img\\projects\\Groups - CroKnitters_files"
+    },
+    {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\Groups - CroKnitters_files\\jquery.min.js",
+      "PackagePath": "staticwebassets\\img\\projects\\Groups - CroKnitters_files\\jquery.min.js"
+    },
+    {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\Groups - CroKnitters_files\\output.css",
+      "PackagePath": "staticwebassets\\img\\projects\\Groups - CroKnitters_files\\output.css"
+    },
+    {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\Groups - CroKnitters_files\\prompt.js",
+      "PackagePath": "staticwebassets\\img\\projects\\Groups - CroKnitters_files\\prompt.js"
+    },
+    {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\Groups - CroKnitters_files\\signalr.min.js",
+      "PackagePath": "staticwebassets\\img\\projects\\Groups - CroKnitters_files\\signalr.min.js"
+    },
+    {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\Groups - CroKnitters_files\\site.css",
+      "PackagePath": "staticwebassets\\img\\projects\\Groups - CroKnitters_files\\site.css"
+    },
+    {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\Groups - CroKnitters_files\\site.js",
+      "PackagePath": "staticwebassets\\img\\projects\\Groups - CroKnitters_files\\site.js"
+    },
+    {
       "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\amigurumi-bunny.jpeg",
       "PackagePath": "staticwebassets\\img\\projects\\amigurumi-bunny.jpeg"
     },
     {
       "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\baby-socks.jpeg",
       "PackagePath": "staticwebassets\\img\\projects\\baby-socks.jpeg"
-    },
-    {
-      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\background.JPG",
-      "PackagePath": "staticwebassets\\img\\projects\\background.JPG"
     },
     {
       "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\img\\projects\\crochet-coaster.jpg",
@@ -115,6 +171,14 @@
     {
       "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\js\\privatechat.js",
       "PackagePath": "staticwebassets\\js\\privatechat.js"
+    },
+    {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\js\\signalr.js",
+      "PackagePath": "staticwebassets\\js\\signalr.js"
+    },
+    {
+      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\js\\signalr.js.map",
+      "PackagePath": "staticwebassets\\js\\signalr.js.map"
     },
     {
       "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\js\\signalr.min.js",
@@ -359,14 +423,6 @@
     {
       "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\lib\\microsoft\\signalr\\README.md",
       "PackagePath": "staticwebassets\\lib\\microsoft\\signalr\\README.md"
-    },
-    {
-      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\lib\\microsoft\\signalr\\dist\\browser\\signalr.js",
-      "PackagePath": "staticwebassets\\lib\\microsoft\\signalr\\dist\\browser\\signalr.js"
-    },
-    {
-      "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\lib\\microsoft\\signalr\\dist\\browser\\signalr.js.map",
-      "PackagePath": "staticwebassets\\lib\\microsoft\\signalr\\dist\\browser\\signalr.js.map"
     },
     {
       "Id": "C:\\Users\\ogida\\OneDrive\\Documents\\GitHub\\CroKnitters_cont\\CroKnitters\\wwwroot\\lib\\microsoft\\signalr\\dist\\cjs\\AbortController.js",

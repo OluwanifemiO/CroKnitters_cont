@@ -1,6 +1,7 @@
 using CroKnitters.Entities;
 using CroKnitters.Hubs;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddSignalR();
+
+builder.Services.AddMemoryCache();
 
 builder.Services.AddSession(options =>
 {
@@ -43,10 +46,9 @@ app.UseSession();
 
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapHub<PrivateChatHub>("/privateChatHub");
-});
+app.MapHub<PrivateChatHub>("/privateChatHub");
+
+app.MapHub<GroupChatHub>("/hub/groupChatHub");
 
 app.MapControllerRoute(
     name: "default",

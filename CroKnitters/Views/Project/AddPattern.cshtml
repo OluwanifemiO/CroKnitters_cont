@@ -1,0 +1,42 @@
+﻿@model ProjectPatternViewModel
+@{
+    ViewData["Title"] = "Add Pattern";
+}
+
+<div class="container mx-auto">
+
+    <div class="flex flex-wrap justify-center mt-10 items-stretch">
+
+        <div class="text-5xl font-extrabold text-center">
+            <span>
+                Associate a Pattern to your Project
+            </span>
+        </div>
+
+        <div class=" rounded-lg border text-center shadow-xl m-5 justify-content-start bg-white">
+
+            <div class="p-2">
+                <form action="AddPattern" method="post">
+                    <input type="hidden" asp-for="@Model.ActiveProjectId" name="ActiveProjectId" />
+
+                    <label for="allPatterns">Select Pattern:</label>
+                    <select id="allPatterns" asp-for="associatedPatternId">
+                        @foreach (var pattern in Model.allPatterns)
+                        {
+                            <option value="@pattern.PatternId" for ="associatedPatternId">@pattern.PatternName</option>
+                        }
+                    </select>
+
+                    <br>
+
+                    <button type="submit" class="btn btn-primary bg-primary m-2">Add Pattern to Project</button>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</div>

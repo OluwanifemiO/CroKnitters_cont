@@ -121,19 +121,38 @@ nav{
     font-weight: 600;
 }
 
+.chat-container {
+    
+    margin: 50px auto;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.message-container {
+    display: flex;
+    flex-direction: column;
+}
+
 .message {
-    padding: 5px;
-    margin-bottom: 5px;
+    padding: 10px;
+    margin: 10px;
     border-radius: 5px;
+    max-width: 70%;
+    word-wrap: break-word;
 }
 
-.sent {
-    align-self: flex-end; /* Align sent messages to the right */
+.sender-message {
+    background-color: #3245fb;
+    color: #000;
+    align-self: flex-end;
 }
 
-.received {
-    align-self: flex-start; /* Align received messages to the left */
-}
+.receiver-message {
+    background-color: #605f5f;
+    color: #fff;
+    align-self: flex-start;
+} 
 
 #message-input {
     display: block;
