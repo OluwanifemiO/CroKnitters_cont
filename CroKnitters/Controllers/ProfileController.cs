@@ -7,7 +7,7 @@ using System.Security.Claims;
 namespace CroKnitters.Controllers
 {
     public class ProfileController : Controller
-    { 
+    {
         public ProfileController(CrochetAppDbContext db)
         {
             _db = db;
@@ -54,7 +54,7 @@ namespace CroKnitters.Controllers
                         UserProfileViewModel viewModel = new UserProfileViewModel()
                         {
                             user = user,
-                            UserImageSrc = userImageSrc, 
+                            UserImageSrc = userImageSrc,
                             numberofComments = commentsMade,
                             numberofPatterns = patternsOwned,
                             numberofProjects = projectsOwned,
@@ -94,14 +94,14 @@ namespace CroKnitters.Controllers
             EditProfileViewModel viewModel = new EditProfileViewModel()
             {
                 UserId = id,
-                 FirstName = user.FirstName,
-                 LastName = user.LastName,
-                 Username = user.Username,
-                 Email = user.Email,
-                 Bio = user.Bio, 
-                 Password = user.Password,
-                 ImageSrc = userImageSrc,
-                 ImageId = userImageId
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Username = user.Username,
+                Email = user.Email,
+                Bio = user.Bio,
+                Password = user.Password,
+                ImageSrc = userImageSrc,
+                ImageId = userImageId
             };
 
             return View(viewModel);
@@ -130,7 +130,7 @@ namespace CroKnitters.Controllers
             Image newImage = null;
 
             if (userViewModel.UserImageSrc != null)
-            {   
+            {
                 //retrieve the profile picture if there is one
                 var imageName = userViewModel.UserImageSrc;
 
@@ -146,7 +146,7 @@ namespace CroKnitters.Controllers
                     Console.WriteLine(stream);
                 }
 
-                 newImage = new Image { ImageSrc = fileName };
+                newImage = new Image { ImageSrc = fileName };
                 _db.Images.Add(newImage);
             }
 
@@ -162,12 +162,12 @@ namespace CroKnitters.Controllers
             };
 
             // Check if a new image was uploaded and associate it with the user
-            if (userViewModel.UserImageSrc != null)
+            if (newImage != null)
             {
                 updateUser.ImageId = newImage.ImageId;
                 updateUser.Image = newImage;
             }
-            else
+            else if (userViewModel.ImageId != 0)
             {
                 updateUser.ImageId = userViewModel.ImageId;
             }
@@ -180,6 +180,6 @@ namespace CroKnitters.Controllers
 
         private CrochetAppDbContext _db;
 
-      
+
     }
 }

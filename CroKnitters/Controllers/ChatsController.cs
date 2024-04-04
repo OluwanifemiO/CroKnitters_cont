@@ -4,6 +4,7 @@ using CroKnitters.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace CroKnitters.Controllers
 {
@@ -12,11 +13,13 @@ namespace CroKnitters.Controllers
     {
         private CrochetAppDbContext _context;
         private IHubContext<PrivateChatHub> _chat;
+        private IMemoryCache _memoryCache;
 
-        public ChatsController(CrochetAppDbContext context, IHubContext<PrivateChatHub> chat)
+        public ChatsController(CrochetAppDbContext context, IHubContext<PrivateChatHub> chat, IMemoryCache memoryCache)
         {
             _context = context;
             _chat = chat;
+            _memoryCache = memoryCache;
         }
 
         [HttpGet("[action]")]
@@ -27,7 +30,7 @@ namespace CroKnitters.Controllers
             userQuery = userQuery.Where(u => u.FirstName.Contains(search) || u.LastName.Contains(search));
             Console.WriteLine(userQuery);
 
-            if (userQuery == null) { Console.WriteLine("No User!");  }
+            if (userQuery == null) { Console.WriteLine("No User!"); }
             else Console.WriteLine("User found!");
 
             var currentUserId = Int32.Parse(Request.Cookies["userId"]!); // Get the current user id
@@ -62,10 +65,13 @@ namespace CroKnitters.Controllers
                 .FirstOrDefault(),
                 LastMessageDate = c.CreationDate,
                 users = userQuery.Include(u => u.Image).ToList(),
-                UserImageSrc = _context.Images.FirstOrDefault(i => i.ImageId == c.Partner.ImageId.Value).ImageSrc
+                UserImageSrc = c.Partner.ImageId.HasValue ? // Check if Partner has ImageId
+                              _context.Images.FirstOrDefault(i => i.ImageId == c.Partner.ImageId.Value)?.ImageSrc : // Get ImageSrc if available
+                               null // Set UserImageSrc to null if Partner doesn't have a profile picture
             }).ToList();
 
-            ViewBag.users = userQuery.Include(u => u.Image).ToList();
+            ViewBag.users = null;
+            ViewBag.users = userQuery.Include(u => u.Image);
             return View(model);
         }
 
@@ -73,8 +79,6 @@ namespace CroKnitters.Controllers
         public async Task<IActionResult> PrivateChat(int id)
         {
             var currentUserId = int.Parse(Request.Cookies["userId"]!); // Get the current user id
-
-
 
             //use the other user's id to get the messages sent back and forth with the current user
             var chatHistory = await _context.PrivateChat
@@ -94,10 +98,9 @@ namespace CroKnitters.Controllers
                 .ToListAsync();
 
             //if there is no history/ no previous messages
-            if(chatHistory.Count < 1)
+            if (chatHistory.Count < 1)
             {
                 //just save the receiver id in a viewbag
-
                 ViewBag.receiverId = id.ToString();
             }
 
@@ -109,15 +112,14 @@ namespace CroKnitters.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> SendMessage(string senderId, string message, string receiverId)
         {
-            Console.WriteLine("sent data: sender ID:" + senderId + " , message content: " + message + " receiver id:" +receiverId);
-            //var currentUserId = int.Parse(Context.GetHttpContext().Request.Cookies["userId"]!); // Get the current user id
+            Console.WriteLine("sent data: sender ID:" + senderId + " , message content: " + message + " receiver id:" + receiverId);
             var SenderId = int.Parse(senderId);
 
             //retrieve the receiverId
             var ReceiverId = int.Parse(receiverId);
             //find the current user
             var currentUser = _context.Users.Find(SenderId);
-
+            var fullName = currentUser.FirstName + " " + currentUser.LastName;
             //find the receiver
             var receiver = _context.Users.Find(ReceiverId);
 
@@ -145,13 +147,16 @@ namespace CroKnitters.Controllers
             _context.PrivateChat.Add(chat);
             await _context.SaveChangesAsync();
 
+            var connectionId = _memoryCache.Get<string>("ConnectionId");
+            Console.WriteLine("connection ID: " + connectionId);
+
             //as the message is sent, let the other user receive the message on their end then return an Ok result
             await _chat.Clients.All.SendAsync("RecieveMessage", new
             {
-                //SenderId = currentUserId,
+                senderId = senderId,
                 content = msg.Content,
                 creationDate = msg.CreationDate.ToString("dd/MM/yyyy hh:mm:ss"),
-                //Sender = currentUser
+                sender = fullName
             });
             return Ok();
         }

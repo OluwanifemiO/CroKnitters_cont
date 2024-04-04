@@ -31,7 +31,10 @@
                     <li class="flex justify-between gap-x-6 py-5">
                         <!--show the user's info-->
                         <div class="flex min-w-0 gap-x-4 pl-3">
-                            <img class="h-12 w-12 flex-none rounded-full bg-gray-50" src="@("~/img/profile/"+member.User.Image.ImageSrc)" asp-append-version="true" alt="User Profile Picture">
+                            @if (member.User.Image != null)
+                            {
+                                <img class="h-12 w-12 flex-none rounded-full bg-gray-50" src="@("~/img/profile/"+member.User.Image.ImageSrc)" asp-append-version="true" alt="User Profile Picture">
+                            }
                             <div class="min-w-0 flex-auto">
                                 <h3 class="text-sm font-semibold leading-6 text-gray-900">@member.User.FirstName  @member.User.LastName</h3>
                                 <p class="mt-1 truncate text-xs leading-5 text-gray-500">
@@ -128,23 +131,26 @@
             var userId = document.getElementById("senderId").value;
 
             if (formData.senderId === userId) {
-                msg.classList.add('sent', 'bg-primary', 'text-white', 'mb-3', 'message'); // Apply CSS class for sent messages
+                msg.classList.add('text-white', 'sender-message', 'message'); // Apply CSS class for sent messages
+                console.log("Sender yeah")
             } else {
-                msg.classList.add('received', 'bg-secondary', 'text-white', 'mb-3', 'message'); // Apply CSS class for received messages
+                msg.classList.add('text-white', 'receiver-message', 'message'); // Apply CSS class for received messages
+                console.log("receiver yeah")
             }
             console.log(formData)
 
-            var p = document.createElement("p");
-            p.className = 'text-2xl';
-            p.appendChild(document.createTextNode(formData.content));
+            var p1 = document.createElement("p");
+            p1.classList.add('text-2xl'); // Apply CSS class to the first paragraph
+            p1.textContent = formData.content; // Set text content for the first paragraph
 
             var p2 = document.createElement("p");
-            p2.appendChild(document.createTextNode(formData.creationDate));
+            p2.textContent = formData.sender + " " + formData.creationDate; // Concatenate sender and creationDate for the second paragraph
 
-            msg.appendChild(p);
+            msg.appendChild(p1); // Append the first paragraph to the div
             msg.appendChild(p2);
 
-            document.querySelector('.messageList').append(msg);
+            console.log(msg)
+            document.querySelector('.message-container').append(msg);
         })
 
 

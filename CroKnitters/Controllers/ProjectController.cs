@@ -468,15 +468,7 @@ namespace CroKnitters.Controllers
                     .Include(pt => pt.Tag)
                     .Where(pt => pt.ProjectId == id);
 
-
-            foreach (var tag in projectTags)
-            {
-                var tags = _crochetDbContext.Tags
-                    .Find(tag.TagId);
-
-                _crochetDbContext.ProjectTags.Remove(tag);
-                _crochetDbContext.Tags.Remove(tags);
-            }
+            _crochetDbContext.ProjectTags.RemoveRange(projectTags);
 
             //remove projectimages and images
             var projectImages = _crochetDbContext.ProjectImages
@@ -503,24 +495,26 @@ namespace CroKnitters.Controllers
                 _crochetDbContext.Images.Remove(Image);
             }
 
-            //remove projectcomments and comments
+            //remove projectcomments
             var projectComments = _crochetDbContext.ProjectComments
                     .Include(p => p.Comment)
                     .Where(p => p.ProjectId == id);
 
-            foreach (var comment in projectComments)
-            {
-                var comments = _crochetDbContext.Comments
-                   .Find(comment.CommentId);
+            _crochetDbContext.ProjectComments.RemoveRange(projectComments);
 
-                _crochetDbContext.ProjectComments.Remove(comment);
-                _crochetDbContext.Comments.Remove(comments);
-            }
+
+            //Remove user projects
+            var userProjects = _crochetDbContext.UserProjects
+                              .Where(up => up.ProjectId == id)
+                              .ToList();
+
+            // Delete user projects
+            _crochetDbContext.UserProjects.RemoveRange(userProjects);
 
             // Retrieve project patterns associated with the project
             var projectPatterns = _crochetDbContext.ProjectPatterns
                 .Where(pp => pp.ProjectId == id)
-                .ToList(); 
+                .ToList();
 
             // Delete project patterns
             _crochetDbContext.ProjectPatterns.RemoveRange(projectPatterns);

@@ -22,11 +22,6 @@
                 <input asp-for="@Model.Password" class="form-control" readonly="readonly" hidden />
 
                 <div class="p-1">
-@*                     <div class="justify-center text-md-center profilePicture rounded-full ">
-                        <!--profile pic-->
-                        <img src="@("~/img/profile/"+Model.ImageSrc)" asp-append-version="true" alt="User Profile image" class="rounded-full" />
-                    </div>
- *@
                     <!--Change profile pic-->
                         <label>Choose a profile picture:</label>
                         <input type="file" id="UserImageSrc" name="UserImageSrc" accept="image/*">

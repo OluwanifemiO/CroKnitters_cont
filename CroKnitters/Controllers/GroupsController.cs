@@ -184,35 +184,39 @@ namespace CroKnitters.Controllers
             //get user id
             var currentUserId = int.Parse(Request.Cookies["userId"]!);
 
+            var groupuser = _context.GroupUsers.Include(g => g.Group).Where(g => g.GroupId == id && g.UserId == currentUserId).ToList();
+
+
             //if the user already isn't a group user
-            //if ()
-            //{
-
-            //}
-
-            //create a new group user object and add the user to it
-            var groupUser = new GroupUser()
+            if (groupuser.Count == 0)
             {
-                GroupId = id,
-                UserId = currentUserId,
-                Role = "Member"
-            };
-            _context.GroupUsers.Add(groupUser);
-            await _context.SaveChangesAsync();
+                //create a new group user object and add the user to it
+                var groupUser = new GroupUser()
+                {
+                    GroupId = id,
+                    UserId = currentUserId,
+                    Role = "Member"
+                };
 
-            ////get the connectionId from the cache
-            //var connectionId = _memoryCache.Get<string>("ConnectionId");
+                _context.GroupUsers.Add(groupUser);
+                await _context.SaveChangesAsync();
 
-            //await _chat.Groups.AddToGroupAsync(connectionId, groupName);
+                return RedirectToAction("GetChat", new { id = id });
 
-            //take them to the group chat
-            return RedirectToAction("GetChat", new {id = id });
+            }
+            else
+            {
+                //if they are already a group user, take them to the chat
+                return RedirectToAction("GetChat", new { id = id });
+
+            }
+
         }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> SendMessage(string senderId, string message, string groupId)
         {
-            Console.WriteLine("sent data: sender ID:" + senderId + " , message content: " + message +" , group id: " + groupId);
+            Console.WriteLine("sent data: sender ID:" + senderId + " , message content: " + message + " , group id: " + groupId);
 
             var SenderId = int.Parse(senderId);
 
@@ -220,6 +224,7 @@ namespace CroKnitters.Controllers
 
             //find the current user
             var currentUser = _context.Users.Find(SenderId);
+            var fullName = currentUser.FirstName + " " + currentUser.LastName;
 
             //find the group
             var group = await _context.Groups.FindAsync(GroupId);
@@ -253,10 +258,10 @@ namespace CroKnitters.Controllers
             //as the message is sent, let the other user receive the message on their end then return an Ok result
             await _chat.Clients.Group(group.GroupName).SendAsync("RecieveMessage", new
             {
-                //SenderId = currentUserId,
-                content = msg.Content,    
+                senderId = senderId,
+                content = msg.Content,
                 creationDate = msg.CreationDate.ToString("dd/MM/yyyy hh:mm:ss"),
-                //Sender = currentUser
+                sender = fullName
             });
             return Ok();
         }

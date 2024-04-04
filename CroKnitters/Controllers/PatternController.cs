@@ -85,7 +85,7 @@ namespace CroKnitters.Controllers
                             else
                             {
                                 // Tag already exists, associate with the pattern
-                                patternViewModel.ActivePattern.PatternTags.Add(new PatternTag { PatternId= patternViewModel.ActivePattern.PatternId, Tag = existingTag });
+                                patternViewModel.ActivePattern.PatternTags.Add(new PatternTag { PatternId = patternViewModel.ActivePattern.PatternId, Tag = existingTag });
                             }
                         }
                     }
@@ -344,7 +344,7 @@ namespace CroKnitters.Controllers
                         {
                             // If the tag doesn't exist, create a new one
                             existingTag = new Tag { TagName = tagName };
-                            _crochetDbContext.Tags.Add(existingTag);                        
+                            _crochetDbContext.Tags.Add(existingTag);
                         }
 
                     }
@@ -410,15 +410,8 @@ namespace CroKnitters.Controllers
                     .Include(pt => pt.Tag)
                     .Where(pt => pt.PatternId == id);
 
+            _crochetDbContext.PatternTags.RemoveRange(patternTags);
 
-            foreach (var tag in patternTags)
-            {
-                var tags = _crochetDbContext.Tags
-                    .Find(tag.TagId);
-
-                _crochetDbContext.PatternTags.Remove(tag);
-                _crochetDbContext.Tags.Remove(tags);
-            }
 
             //remove patternimages and images
             var patternImages = _crochetDbContext.PatternImage
@@ -450,14 +443,23 @@ namespace CroKnitters.Controllers
                     .Include(p => p.Comment)
                     .Where(p => p.PatternId == id);
 
-            foreach (var comment in patternComments)
-            {
-                var comments = _crochetDbContext.Comments
-                   .Find(comment.CommentId);
+            _crochetDbContext.PatternComments.RemoveRange(patternComments);
 
-                _crochetDbContext.PatternComments.Remove(comment);
-                _crochetDbContext.Comments.Remove(comments);
-            }
+            //Remove user projects
+            var userPatterns = _crochetDbContext.UserPatterns
+                              .Where(up => up.PatternId == id)
+                              .ToList();
+
+            // Delete user projects
+            _crochetDbContext.UserPatterns.RemoveRange(userPatterns);
+
+            // Retrieve project patterns associated with the project
+            var projectPatterns = _crochetDbContext.ProjectPatterns
+                .Where(pp => pp.PatternId == id)
+                .ToList();
+
+            // Delete project patterns
+            _crochetDbContext.ProjectPatterns.RemoveRange(projectPatterns);
 
             // Remove the pattern lastly
             _crochetDbContext.Patterns.Remove(pattern);

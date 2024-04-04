@@ -32,11 +32,11 @@
                 <!--if the model is empty, it shows that it is a new user, loop through the viewbag-->
                 @if (Model == null || Model.Count == 0)
                 {
-                    <div class="p-2">
+                    <div class="m-2">
                         <!--show the user's info-->
                         @foreach (var user in ViewBag.users)
                         {
-                            <div class="flex min-w-0 gap-x-4 p-2">
+                            <div class="flex min-w-0 gap-x-4 m-2">
                                 <img class="h-12 w-12 flex-none rounded-full bg-gray-50" src="@("~/img/profile/"+user.Image.ImageSrc)" asp-append-version="true" alt="User Profile Picture">
                                 <div class="pt-2">
                                     <h3 class="text-sm font-semibold leading-6 text-gray-900">@user.FirstName @user.LastName</h3>
@@ -53,7 +53,7 @@
                 {
                     @foreach (var user in item.users)
                     {
-                        <div class="flex min-w-0 gap-x-4">
+                        <div class="flex min-w-0 gap-x-4 m-2">
                             <img class="h-12 w-12 flex-none rounded-full bg-gray-50" src="@("~/img/profile/"+user.Image.ImageSrc)" asp-append-version="true" alt="User Profile Picture">
                             <div class="pt-2">
                                 <h3 class="text-sm font-semibold leading-6 text-gray-900">@user.FirstName @user.LastName</h3>
@@ -79,50 +79,30 @@
 
                 <div class="sm:w-full p-4">
                     <ul role="list" class="divide-y divide-grey-900" style="width:500px;">
-                        <!--If the user has no chats-->
-                        @if (Model == null || Model.Count == 0)
-                        {
-                            <p class="text-2xl"> OOPS! Looks like you have no one to talk to. Search for a user with their name to message them.</p>
 
-                            <div class="p-2">
+                        @foreach (var chat in Model)
+                        {
+                            <li class="flex justify-between gap-x-6 py-5">
                                 <!--show the user's info-->
-                                @foreach (var user in ViewBag.users)
-                                {
+                                <a asp-controller="Chats" asp-action="PrivateChat" asp-route-id="@chat.PartnerId" class="">
                                     <div class="flex min-w-0 gap-x-4">
-                                        <img class="h-12 w-12 flex-none rounded-full bg-gray-50" src="@("~/img/profile/"+user.Image.ImageSrc)" asp-append-version="true" alt="User Profile Picture">
+                                        <img class="h-12 w-12 flex-none rounded-full bg-gray-50" src="@("~/img/profile/"+chat.UserImageSrc)" asp-append-version="true" alt="User Profile Picture">
                                         <div class="min-w-0 flex-auto">
-                                            <h3 class="text-sm font-semibold leading-6 text-gray-900">@user.FirstName @user.LastName</h3>
-                                            <a asp-controller="Chats" asp-action="PrivateChat" asp-route-id="@user.UserId" class="btn btn-primary">Message</a>
+                                            <h3 class="text-sm font-semibold leading-6 text-gray-900">@chat.PartnerUserName</h3>
+                                            <p class="mt-1 truncate text-xs leading-5 text-gray-500">
+                                                @{
+                                                    string truncatedMessage = chat.LastMessage.Length > 20 ? chat.LastMessage.Substring(0, 20) + "..." : chat.LastMessage;
+                                                }
+                                                @truncatedMessage @chat.LastMessageDate
+                                            </p>
                                         </div>
                                     </div>
-                                }
-                            </div>
-                        }
-                        else
-                        {
-                            @foreach (var chat in Model)
-                            {
-                                <li class="flex justify-between gap-x-6 py-5">
-                                    <!--show the user's info-->
-                                    <a asp-controller="Chats" asp-action="PrivateChat" asp-route-id="@chat.PartnerId" class="">
-                                        <div class="flex min-w-0 gap-x-4">
-                                            <img class="h-12 w-12 flex-none rounded-full bg-gray-50" src="@("~/img/profile/"+chat.UserImageSrc)" asp-append-version="true" alt="User Profile Picture">
-                                            <div class="min-w-0 flex-auto">
-                                                <h3 class="text-sm font-semibold leading-6 text-gray-900">@chat.PartnerUserName</h3>
-                                                <p class="mt-1 truncate text-xs leading-5 text-gray-500">
-                                                    @{
-                                                        string truncatedMessage = chat.LastMessage.Length > 20 ? chat.LastMessage.Substring(0, 20) + "..." : chat.LastMessage;
-                                                    }
-                                                    @truncatedMessage @chat.LastMessageDate
-                                                </p>
-                                            </div>
-                                        </div>
 
-                                    </a>
-                                </li>
-                                <hr />
-                            }
+                                </a>
+                            </li>
+                            <hr />
                         }
+
 
                     </ul>
 

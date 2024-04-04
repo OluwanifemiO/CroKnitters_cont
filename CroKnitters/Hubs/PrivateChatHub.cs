@@ -2,6 +2,7 @@
 using CroKnitters.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 
 namespace CroKnitters.Hubs
@@ -9,45 +10,27 @@ namespace CroKnitters.Hubs
     public class PrivateChatHub : Hub
     {
         private CrochetAppDbContext _context;
+        private readonly IMemoryCache _memoryCache;
 
-        public PrivateChatHub(CrochetAppDbContext context)
+        public PrivateChatHub(CrochetAppDbContext context, IMemoryCache memoryCache)
         {
             _context = context;
+            _memoryCache = memoryCache;
         }
 
         public string GetConnectionId()
-        => Context.ConnectionId;
-
-
-        public async Task SendMessage(string senderId, string message)
         {
-            Console.WriteLine("sent data: " +senderId  + " " + message);
-            //var currentUserId = int.Parse(Context.GetHttpContext().Request.Cookies["userId"]!); // Get the current user id
-            var SenderId = int.Parse(senderId);
-            //find the current user
-            var currentUser = _context.Users.Find(SenderId);
+            var connectionId = Context.ConnectionId;
 
-            //save the data in the message model to the db 
-            var msg = new Message()
-            {
-                SenderId = SenderId,
-                Content = message,
-                CreationDate = DateTime.Now,
-                Sender = currentUser
-            };
+            return connectionId;
+        }
 
-            _context.Messages.Add(msg);
-            await _context.SaveChangesAsync();
+        public override async Task OnConnectedAsync()
+        {
+            var connectionId = Context.ConnectionId;
 
-
-            //as the message is sent, let the other user receive the message on their end 
-            await Clients.All.SendAsync("ReceiveMessage", new
-            {
-                //SenderId = currentUserId,
-                content = msg.Content,
-                creationDate = msg.CreationDate.ToString("dd/MM/yyyy hh:mm:ss"),
-                //Sender = currentUser
-            });
+            _memoryCache.Set<string>("ConnectionId", connectionId);
+            await base.OnConnectedAsync();
         }
     }
 }
