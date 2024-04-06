@@ -47,11 +47,8 @@
                         }
                     </div>
                 }
-
-                <!--if it is not empty, loop though the list in the model-->
-                @foreach (var item in Model)
-                {
-                    @foreach (var user in item.users)
+                else
+                    @foreach (var user in ViewBag.users)
                     {
                         <div class="flex min-w-0 gap-x-4 m-2">
                             <img class="h-12 w-12 flex-none rounded-full bg-gray-50" src="@("~/img/profile/"+user.Image.ImageSrc)" asp-append-version="true" alt="User Profile Picture">
@@ -62,7 +59,7 @@
                         </div>
                     }
 
-                }
+
             </div>
 
             <!--chats list-->

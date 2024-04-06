@@ -316,16 +316,15 @@ namespace CroKnitters.Controllers
         {
             if (ModelState.IsValid)
             {
-                //find the pattern with the id
-                var existingPattern = await _crochetDbContext.Patterns
-                    .Include(p => p.PatternTags).ThenInclude(pt => pt.Tag)
-                    .Include(p => p.PatternImages)
-                    .FirstOrDefaultAsync(p => p == patternViewModel.ActivePattern);
 
-                if (existingPattern == null)
-                {
-                    return NotFound();
-                }
+                int userId = Int32.Parse(Request.Cookies["userId"]!);
+
+                var user = _crochetDbContext.Users.Find(userId);
+
+                patternViewModel.ActivePattern.OwnerId = userId;
+                patternViewModel.ActivePattern.Owner = user;
+                patternViewModel.ActivePattern.PatternTags.Clear();
+
 
                 UpdateImages(patternViewModel);
 
@@ -345,14 +344,16 @@ namespace CroKnitters.Controllers
                             // If the tag doesn't exist, create a new one
                             existingTag = new Tag { TagName = tagName };
                             _crochetDbContext.Tags.Add(existingTag);
-                        }
 
+                            patternViewModel.ActivePattern.PatternTags.Add(new PatternTag { PatternId = patternViewModel.ActivePattern.PatternId, Tag = existingTag });
+                        }
                     }
                 }
 
                 // Save changes to the database
+                _crochetDbContext.Patterns.Update(patternViewModel.ActivePattern);
                 await _crochetDbContext.SaveChangesAsync();
-                return RedirectToAction("Details", new { id = existingPattern.PatternId });
+                return RedirectToAction("Details", new { id = patternViewModel.ActivePattern.PatternId });
             }
 
             // Log or inspect ModelState errors

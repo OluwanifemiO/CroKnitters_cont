@@ -380,17 +380,14 @@ namespace CroKnitters.Controllers
         {
             if (ModelState.IsValid)
             {
-                //find the project with the id
-                var existingProject = await _crochetDbContext.Projects
-                     .Include(p => p.ProjectTags).ThenInclude(pt => pt.Tag)
-                     .Include(p => p.ProjectImages)
-                     .FirstOrDefaultAsync(p => p == projectViewModel.ActiveProject);
 
-                if (existingProject == null)
-                {
-                    Console.WriteLine("Didnt find project.");
-                    return NotFound();
-                }
+                int userId = Int32.Parse(Request.Cookies["userId"]!);
+
+                var user = _crochetDbContext.Users.Find(userId);
+
+                projectViewModel.ActiveProject.OwnerId = userId;
+                projectViewModel.ActiveProject.Owner = user;
+                projectViewModel.ActiveProject.ProjectTags.Clear();
 
                 UpdateImages(projectViewModel);
 
@@ -408,12 +405,15 @@ namespace CroKnitters.Controllers
                             // If the tag doesn't exist, create a new one
                             existingTag = new Tag { TagName = tagName };
                             _crochetDbContext.Tags.Add(existingTag);
+
+                            projectViewModel.ActiveProject.ProjectTags.Add(new ProjectTag { ProjectId = projectViewModel.ActiveProject.ProjectId, Tag = existingTag });
                         }
                     }
                 }
                 // Save changes to the database
+                _crochetDbContext.Projects.Update(projectViewModel.ActiveProject);
                 await _crochetDbContext.SaveChangesAsync();
-                return RedirectToAction("Details", new { id = existingProject.ProjectId });
+                return RedirectToAction("Details", new { id = projectViewModel.ActiveProject.ProjectId });
             }
 
             // Log or inspect ModelState errors
